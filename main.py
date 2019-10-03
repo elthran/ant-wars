@@ -19,6 +19,7 @@ class World(object):
         self.height = 100
         self.ants = [Ant(5, 5, self) for i in range(5)]
         self.food_supply = [Food() for i in range(100)]
+        self.impassable_objects = [Rock(25, 30) for i in range(1)]
 
     def check_if_coordinate_has_food(self, ant):
         """
@@ -32,10 +33,20 @@ class World(object):
                 food.is_eaten()
                 ant.eats_food()
 
+    def check_if_coordinate_is_impassable(self, ant_x, ant_y):
+        impassable_coordinates = []
+        for obstacle in self.impassable_objects:
+            for x_pos in range(obstacle.x_pos, obstacle.x_pos + obstacle.width + 1):
+                for y_pos in range(obstacle.y_pos, obstacle.y_pos + obstacle.height + 1):
+                    impassable_coordinates.append((x_pos, y_pos))
+        if (ant_x, ant_y) in impassable_coordinates:
+            return True
+        return False
+
 
 class Food(object):
     """
-    A piece of food that an Ant may eat.
+    A piece of food that an Ant may eat
 
     Args:
         x_pos/y_pos (int): The coordinates on the map that the Food is currently at
@@ -57,6 +68,32 @@ class Food(object):
         self.image.set_radius(0)
 
 
+class ImpassableObstacle(object):
+    """
+    Any part of the world that any creature can't enter
+
+    Args:
+        all_x_pos/all_y_pos (list of int): The coordinates on the map that the impassable obstacle blocks
+    """
+
+    def __init__(self, x_pos, y_pos):
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.image = None
+
+
+class Rock(ImpassableObstacle):
+    def __init__(self, x_pos, y_pos):
+        super(Rock, self).__init__(x_pos, y_pos)
+        self.height = 25
+        self.width = 25
+        self.image = plt.Rectangle((self.x_pos, self.y_pos),
+                                   self.height,
+                                   self.width,
+                                   color='b',
+                                   fill=True)
+
+
 class Ant(object):
     """
     An Ant which exists on the map.
@@ -69,8 +106,8 @@ class Ant(object):
     """
 
     def __init__(self, x_pos, y_pos, world):
-        self.x_pos = x_pos * np.random.random_sample()
-        self.y_pos = y_pos * np.random.random_sample()
+        self.x_pos = x_pos
+        self.y_pos = y_pos
         self.velx = self.generate_new_velocity()
         self.vely = self.generate_new_velocity()
         self.size = 5
@@ -99,6 +136,8 @@ class Ant(object):
         """
         This function gets a new random velocity and moves the ant, checking for food
         """
+        previous_x_pos = self.x_pos
+        previous_y_pos = self.y_pos
         if np.random.random_sample() < 0.95:
             self.x_pos = self.x_pos + self.velx
             self.y_pos = self.y_pos + self.vely
@@ -107,6 +146,9 @@ class Ant(object):
             self.vely = self.generate_new_velocity()
             self.x_pos = self.x_pos + self.velx
             self.y_pos = self.y_pos + self.vely
+        if self.world.check_if_coordinate_is_impassable(self.x_pos, self.y_pos):
+            self.x_pos = previous_x_pos
+            self.y_pos = previous_y_pos
         if self.x_pos >= 100:
             self.x_pos = 100
             self.velx = -1 * self.velx
@@ -129,11 +171,14 @@ plot_figure = plt.figure()
 # Create the dimensions of the image based on the World size
 world_axes = plt.axes(xlim=(0, world.width), ylim=(0, world.height))
 # Plot all of the Ants as 'red' '+'-symbols
-d, = world_axes.plot([ant.x_pos for ant in world.ants],
-                     [ant.y_pos for ant in world.ants], 'r+')
+d, = world_axes.plot([world.ants[0].x_pos],
+                     [world.ants[0].y_pos], 'r+', markersize=5)
 # Draw all of the food images
 for food in world.food_supply:
     world_axes.add_artist(food.image)
+# Draw all of the terrain obstacles
+for object in world.impassable_objects:
+    world_axes.add_artist(object.image)
 
 
 # Animate the ants. This is done sequentially.
