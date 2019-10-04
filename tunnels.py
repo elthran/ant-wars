@@ -1,4 +1,4 @@
-from random import uniform as rand
+from random import random as rand
 
 
 class Bitmap:
@@ -28,33 +28,36 @@ tunnels = Bitmap(10, 10)
 print(tunnels)
 
 
-
 def build_tunnels(bitmap, depth=6):
     center = bitmap.width // 2
     bitmap[center] = 1
 
     rules = {
         0: [
-            [rand(0.05, 0.15), 1, rand(0.05, 0.15)],
-            [rand(0.03, 0.07), rand(0.03, 0.07), rand(0.03, 0.07)]
+            [round(rand()-0.4), 1, round(rand()-0.4)],
+            [round(rand()-0.1), round(rand()-0.1), round(rand()-0.1)]
         ],
     }
 
-    for i in range(depth):
-        row = i*bitmap.height
-        b = row + center
-        a = b - 1
-        c = b + 1
-        e = row + bitmap.height + center
-        d = e - 1
-        f = e + 1
-        bitmap[a] = bitmap[a] + rules[0][0][0] % 2
-        bitmap[b] = bitmap[b] + rules[0][0][1] % 2
-        bitmap[c] = bitmap[c] + rules[0][0][2] % 2
-        bitmap[d] = bitmap[d] + rules[0][1][0] % 2
-        bitmap[e] = bitmap[e] + rules[0][1][1] % 2
-        bitmap[f] = bitmap[f] + rules[0][1][2] % 2
+    for steps in range(depth):
+        for i in range(steps):
+            row = i*bitmap.height
+            for j in range(bitmap.width):
+                b = row + j
+                if bitmap[b] == 1:
+                    a = b - 1
+                    c = b + 1
+                    e = row + bitmap.height + j
+                    d = e - 1
+                    f = e + 1
+                    bitmap[a] = rules[0][0][0]
+                    bitmap[b] = rules[0][0][1]
+                    bitmap[c] = rules[0][0][2]
+                    bitmap[d] = rules[0][1][0]
+                    bitmap[e] = rules[0][1][1]
+                    bitmap[f] = rules[0][1][2]
 
 
 build_tunnels(tunnels)
 print(tunnels)
+
