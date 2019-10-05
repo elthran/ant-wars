@@ -23,6 +23,12 @@ class Bitmap:
             s += ''.join(map(str, self[row:row+self.width])) + '\n'
         return s
 
+    def from_xy(self, x, y):
+        return y * self.width + x
+
+    def to_xy(self, n):
+        return n // self.width, n % self.width
+
 
 tunnels = Bitmap(10, 10)
 print(tunnels)
