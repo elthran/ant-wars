@@ -1,14 +1,24 @@
+// webpack.config.js
 // This library allows us to combine paths easily
 const path = require('path');
 
-module.exports = {
+const { VueLoaderPlugin } = require('vue-loader');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const env = process.env.NODE_ENV;
+
+const config = {
   entry: path.resolve(__dirname, 'src', 'main.js'),
+  mode: env,
   output: {
-    path: path.resolve(__dirname, '../output'),
-    filename: 'bundle.js'
+    publicPath: '../output',
   },
-  resolve: {
-    extensions: ['.js', '.vue']
+  optimization: {
+    splitChunks: {
+      // Must be specified for HtmlWebpackPlugin to work correctly.
+      // See: https://github.com/jantimon/html-webpack-plugin/issues/882
+      chunks: 'all',
+    },
   },
   module: {
     rules: [
@@ -20,13 +30,31 @@ module.exports = {
         test: /\.js$/,
         use: {
           loader: 'babel-loader',
-          options: { presets: ['react', 'es2015'] }
-        }
+          options: { presets: ['react', 'es2015'] },
+        },
+        include: [path.join(__dirname, 'src')],
       },
       {
         test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'sass-loader']
-      }
-    ]
-  }
+        use: [
+          'vue-style-loader',
+          'css-loader',
+          {
+            loader: 'sass-loader',
+          },
+        ],
+      },
+    ],
+  },
+  plugins: [
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({
+      filename: path.join(__dirname, 'dist', 'index.html'),
+      template: path.join(__dirname, 'static', 'index.html'),
+      inject: true,
+    }),
+  ],
 };
+
+
+module.exports = config;
