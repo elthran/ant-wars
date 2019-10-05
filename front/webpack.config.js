@@ -28,10 +28,7 @@ const config = {
       },
       {
         test: /\.js$/,
-        use: {
-          loader: 'babel-loader',
-          options: { presets: ['react', 'es2015'] },
-        },
+        loader: 'babel-loader',
         include: [path.join(__dirname, 'src')],
       },
       {
