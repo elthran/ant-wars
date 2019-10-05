@@ -56,12 +56,12 @@ def build_tunnels(bitmap, depth=6):
                     e = row + bitmap.height + j
                     d = e - 1
                     f = e + 1
-                    bitmap[a] = rules[0][0][0]
-                    bitmap[b] = rules[0][0][1]
-                    bitmap[c] = rules[0][0][2]
-                    bitmap[d] = rules[0][1][0]
-                    bitmap[e] = rules[0][1][1]
-                    bitmap[f] = rules[0][1][2]
+                    bitmap[a] |= rules[0][0][0]
+                    bitmap[b] |= rules[0][0][1]
+                    bitmap[c] |= rules[0][0][2]
+                    bitmap[d] |= rules[0][1][0]
+                    bitmap[e] |= rules[0][1][1]
+                    bitmap[f] |= rules[0][1][2]
 
 
 build_tunnels(tunnels)
