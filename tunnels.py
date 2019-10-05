@@ -19,7 +19,7 @@ class Bitmap:
     def __str__(self):
         s = ''
         for i in range(self.height):
-            row = i*self.height
+            row = i*self.width
             s += ''.join(map(str, self[row:row+self.width])) + '\n'
         return s
 
