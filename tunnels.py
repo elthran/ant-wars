@@ -46,14 +46,15 @@ def build_tunnels(bitmap, depth=6):
     }
 
     for steps in range(depth):
-        for i in range(steps):
-            row = i*bitmap.height
-            for j in range(bitmap.width):
-                b = row + j
+        for y in range(steps):
+            row = y*bitmap.width
+            next_row = y * bitmap.width + bitmap.width
+            for x in range(bitmap.width):
+                b = row + x
                 if bitmap[b] == 1:
                     a = b - 1
                     c = b + 1
-                    e = row + bitmap.height + j
+                    e = next_row + x
                     d = e - 1
                     f = e + 1
                     bitmap[a] |= rules[0][0][0]
