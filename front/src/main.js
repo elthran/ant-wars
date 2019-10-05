@@ -9,5 +9,7 @@ Vue.use(VueKonva);
 new Vue({
   el: '#app',
   components: { App },
-  template: '<App/>'
+  render (h) {
+    return h('app')
+  },
 });
