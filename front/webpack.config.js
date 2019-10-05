@@ -11,7 +11,7 @@ const config = {
   entry: path.resolve(__dirname, 'src', 'main.js'),
   mode: env,
   output: {
-    publicPath: '../output',
+    publicPath: '/',
   },
   optimization: {
     splitChunks: {
@@ -46,7 +46,7 @@ const config = {
   plugins: [
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
-      filename: path.join(__dirname, 'dist', 'index.html'),
+      filename: path.join(__dirname, '..', 'dist', 'index.html'),
       template: path.join(__dirname, 'static', 'index.html'),
       inject: true,
     }),
