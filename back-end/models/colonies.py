@@ -1,5 +1,5 @@
-from templates import db, GameState
-from models.ants import Ant
+from .templates import db, GameState
+from .ants import Ant
 
 
 class Colony(GameState):

@@ -1,12 +1,23 @@
-import random
-import time
+from random import randint
+from time import sleep
 
-from models.templates import GameState
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy  # pip install Flask-SQLAlchemy
 
-from models.worlds import World
-from models.ants import Ant
-from models.colonies import Colony
-from models.nests import Nest
+from .models.worlds import World
+from .models.ants import Ant
+from .models.colonies import Colony
+from .models.nests import Nest
+
+
+app = Flask(__name__)
+
+flask_db = SQLAlchemy()
+
+flask_db.init_app(app)
+
+db = flask_db
+
 
 
 def run_game():
@@ -26,9 +37,9 @@ def run_game():
         for ant in player1.ants:
             ant.move()
         frame += 1
-        if random.randint(1, 100) > 100:
+        if randint(1, 100) > 100:
             player1.birth_ant()
-        time.sleep(2)
+        sleep(2)
 
 
 run_game()

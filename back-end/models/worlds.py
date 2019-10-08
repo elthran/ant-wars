@@ -1,4 +1,4 @@
-from templates import db, GameState
+from .templates import db, GameState
 
 
 class World(GameState):

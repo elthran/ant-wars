@@ -1,5 +1,5 @@
-from templates import db, GameState
-from tunnels import Tunnel
+from .templates import db, GameState
+from .tunnels import Tunnel
 
 
 class Nest(GameState):
