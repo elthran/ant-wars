@@ -1,7 +1,7 @@
 import random
 import time
 
-from models.bases import GameState
+from models.templates import GameState
 
 from models.worlds import World
 from models.ants import Ant

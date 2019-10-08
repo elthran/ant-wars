@@ -5,7 +5,7 @@ from sqlalchemy.exc import DatabaseError
 from extensions import flask_db as db
 
 
-class Base(db.Model):
+class Template(db.Model):
     __abstract__ = True
 
     def save(self):
@@ -30,7 +30,7 @@ class Base(db.Model):
             raise
 
 
-class GameState(Base):
+class GameState(Template):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
@@ -38,7 +38,7 @@ class GameState(Base):
     time_modified = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
 
-class GameEvent(Base):
+class GameEvent(Template):
     __abstract__ = True
 
     id = db.Column(db.Integer, primary_key=True)

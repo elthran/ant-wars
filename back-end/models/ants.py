@@ -1,6 +1,6 @@
 import random
 
-from bases import db, GameState
+from templates import db, GameState
 
 
 class Ant(GameState):

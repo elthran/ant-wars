@@ -1,4 +1,4 @@
-from bases import db, GameState
+from templates import db, GameState
 
 
 class Tunnel(GameState):
