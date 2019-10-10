@@ -3,18 +3,6 @@
 # This script uses sudo only where absolutely necessary.
 set -e
 
-# Set the current directory so that all paths are consistent.
-move_to_base() {
-    parent_path=$( cd "$(dirname "${BASH_SOURCE[0]}")"; pwd -P )
-    cd "$parent_path/.."  # make sure you are in the top-level directory
-}
-
-# generate a random password, default is 32 chars
-# alterante usage is `randpw 16` (or whatever)
-randpw() {
-    < /dev/urandom tr -dc "[:alnum:]" | head -c${1:-${1-32}}; echo;
-}
-
 install_apt_modules() {
     echo "Installing requisite apt modules ..."
     sudo apt update
@@ -36,18 +24,23 @@ if (( $(echo "$parsedVersion < 0.36" | bc -l) )); then
 
 setup_virtual_environment() {
     game_name=$1
+    virtual_env=~/virtual_envs/${game_name}
 
-    rm -rf ~/virtual_envs/${game_name}
-    python3 -m venv ~/virtual_envs/${game_name}
+    if [ ! -d $virtual_env ];then
+        python3 -m venv $virtual_env
+    fi
     rm -f bin/activate
-    ln -s ~/virtual_envs/${game_name}/bin/activate bin/activate
+    echo "
+    # Call external venv
+    source ${virtual_env}/bin/activate
+    " | rstrip >> bin/activate
 
     # allow activate script to auto start mysql
     echo "
     # Inject mysql startup into environment activation
     sudo /etc/init.d/mysql start
     sudo -k
-    " >> bin/activate
+    " | rstrip >> bin/activate
 
     # active virtual environment
     . bin/activate
@@ -56,19 +49,29 @@ setup_virtual_environment() {
 }
 
 install_app_into_virtual_environment() {
-    pip install .
+    setup_file="setup.py"
+    requirements_file="requirements.txt"
+
+    if [ -e $setup_file ];then
+        pip install .
+    elif [ -e $requirements_file ];then
+        pip install -r $requirements_file
+    else
+        echo "No pip install option is available."
+        exit 1
+    fi
 }
 
 build_mysql_config() {
     game_name=$1
     user_passwd=$2
-    user=$3
+    user=${3-root}
 
     mysql_cnf=~/.${game_name}_mysql_config.cnf
     rm -rf $mysql_cnf
     echo "
     [client]
-    user = ${user-root}
+    user = ${user}
     password = ${user_passwd}
     # Before use set file to read-only with \$ chmod 400 $mysql_cnf
     " > $mysql_cnf
@@ -95,8 +98,8 @@ get_set_mysql_root_password() {
 }
 
 set_mysql_user_grants() {
-    mysql_db=$1
-    mysql_user=$2
+    mysql_db=${1//-/_} # replace - with _
+    mysql_user=mysql_${2}
 
     mysql_passwd=$(randpw 16)
 
@@ -127,28 +130,32 @@ generate_private_config() {
 }
 
 ignore_private_config() {
-    LINE='private_config.py'
-    FILE=app/config/private_config.py
+    LINE='private_*'
+    FILE=.gitignore
     grep -qF -- "$LINE" "$FILE" || echo "$LINE" >> "$FILE"
 }
 
 # NOTE: to server app from inside vagrant I need to use
 # python manage.py serve -h 0.0.0.0
 install() {
-    move_to_base
-
     GAME_NAME="ant-wars" # ${PWD##*/}
-    USER="elthran" # $USER
+    CURRENT_USER="elthran" # $USER
+    SCRIPT_DIR=$(dirname $0)
+
+    source ${SCRIPT_DIR}/bash_helpers.sh
+    move_to_base $SCRIPT_DIR
 
     install_apt_modules
     check_python3_version
     setup_virtual_environment $GAME_NAME
     install_app_into_virtual_environment
     get_set_mysql_root_password $GAME_NAME
-    set_mysql_user_grants $GAME_NAME $USER
+    set_mysql_user_grants $GAME_NAME $CURRENT_USER
     generate_private_config
     ignore_private_config
     echo "${GAME_NAME} back-end development environment installed."
+
+    return_from_base
 }
 
 # run the actual install script
