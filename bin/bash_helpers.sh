@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # Set the current directory so that all paths are consistent.
 move_to_base() {
     script_dir=$1
