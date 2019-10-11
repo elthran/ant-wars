@@ -34,13 +34,15 @@ def run_game():
         player1_ant.save()
         while True:
             print("Frame {frame}".format(frame=frame))
-            print(player1_nest)
-            print("\n\n\n")
-            for ant in player1.ants:
-                ant.move()
+            # print(player1_nest)
+            print("hello")
+            # print("\n\n\n")
+            # for ant in player1.ants:
+            #     ant.perform_action()
             frame += 1
-            if randint(1, 100) > 100:
-                player1.birth_ant()
+            # if randint(1, 100) > 100:
+            #     player1.birth_ant()
+            # print("Ant is at {x_pos},{y_pos}".format(x_pos=player1_ant.x_pos, y_pos=player1_ant.y_pos))
             sleep(2)
 
 
