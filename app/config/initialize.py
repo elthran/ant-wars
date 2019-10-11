@@ -2,7 +2,7 @@ from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 
-from .extensions import db
+from .extensions import flask_db as db
 from . import private_config
 from . import environment
 

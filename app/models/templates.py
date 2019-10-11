@@ -2,7 +2,7 @@ from datetime import datetime
 
 from sqlalchemy.exc import DatabaseError
 
-from ..config.extensions import db
+from ..config.extensions import flask_db as db
 
 
 convention = {
