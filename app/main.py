@@ -2,7 +2,8 @@ from random import randint
 from time import sleep
 
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy  # pip install Flask-SQLAlchemy
+
+from .extensions import flask_db
 
 from .models.worlds import World
 from .models.ants import Ant
@@ -11,8 +12,6 @@ from .models.nests import Nest
 
 
 app = Flask(__name__)
-
-flask_db = SQLAlchemy()
 
 flask_db.init_app(app)
 

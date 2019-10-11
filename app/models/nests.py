@@ -9,7 +9,7 @@ class Nest(GameState):
     height = db.Column(db.Integer)
     entrance_x_pos = db.Column(db.Integer)
     entrance_y_pos = db.Column(db.Integer)
-    excavated_coordinates = db.relationship('Tunnels', backref='nest')
+    excavated_coordinates = db.relationship('Tunnel', backref='nest')
 
     def __init__(self, colony_id, width, height):
         self.colony_id = colony_id
