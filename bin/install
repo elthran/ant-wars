@@ -32,7 +32,7 @@ setup_virtual_environment() {
     rm -f bin/activate
     echo "
     # Call external venv
-    source ${virtual_env}/bin/activate
+    source ~/virtual_envs/${game_name}/bin/activate
     " | rstrip >> bin/activate
 
     # allow activate script to auto start mysql
