@@ -14,7 +14,7 @@ class Ant(GameState):
         self.colony_id = colony_id
         self.nest_id = nest_id
         self.x_pos = x_pos
-        self.y_pos = width
+        self.y_pos = y_pos
         self.size = 5
 
     def perform_action(self):
