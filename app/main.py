@@ -1,6 +1,8 @@
 from random import randint
 from time import sleep
 
+from flask import Flask
+
 from .config.initialize import initialize
 
 from .models.worlds import World
@@ -8,8 +10,8 @@ from .models.ants import Ant
 from .models.colonies import Colony
 from .models.nests import Nest
 
-
-app = initialize(models=[World, Ant, Colony, Nest])
+app = Flask(__name__.split('.')[0])
+initialize(app, models=[World, Ant, Colony, Nest])
 
 
 @app.route('/')

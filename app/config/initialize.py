@@ -1,4 +1,3 @@
-from flask import Flask
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
 
@@ -7,9 +6,7 @@ from . import private_config
 from . import environment
 
 
-def initialize(models=None):
-    app = Flask(__name__)
-
+def initialize(app, models=None):
     load_configs(app)
     load_extensions(app)
     load_models(models)
