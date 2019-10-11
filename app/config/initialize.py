@@ -22,6 +22,7 @@ def initialize(app, models=None):
         player1_nest.save()
         player1_ant = Ant(player1.id, player1_nest.id, 20, 20)
         player1_ant.save()
+        db.session.commit()
     return app
 
 
