@@ -14,6 +14,7 @@ def initialize(app, models=None):
     load_models(models)
 
     with app.app_context():
+        db.drop_all()
         db.create_all()
 
         game_world = World()
