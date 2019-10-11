@@ -38,6 +38,7 @@ setup_virtual_environment() {
     # allow activate script to auto start mysql
     echo "
     # Inject mysql startup into environment activation
+    echo 'Enter your sudo password to start mysql'
     sudo /etc/init.d/mysql start
     sudo -k
     " | rstrip >> bin/activate
