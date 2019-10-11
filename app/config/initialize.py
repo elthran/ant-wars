@@ -4,11 +4,13 @@ from sqlalchemy_utils import database_exists, create_database
 from .extensions import flask_db as db
 from . import private_config
 from . import environment
+from . import hooks
 
 
 def initialize(app, models=None):
     load_configs(app)
     load_extensions(app)
+    load_hooks(app)
     load_models(models)
 
     with app.app_context():
@@ -38,6 +40,10 @@ def load_extensions(app):
     if not database_exists(engine.url):
         create_database(engine.url)
     db.init_app(app)
+
+
+def load_hooks(app):
+    hooks.add_auto_commit(app, db)
 
 
 def load_models(models):
