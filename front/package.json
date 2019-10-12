@@ -2,31 +2,14 @@
   "name": "ant-wars-front",
   "version": "1.0.0",
   "main": "main.js",
+  "author": "Marlen Brunner",
   "license": "MIT",
-  "dependencies": {
-    "konva": "^4.0.13",
-    "vue": "^2.6.10",
-    "vue-konva": "^2.0.11",
-    "vue-template-compiler": "^2.6.10"
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "devDependencies": {
-    "@babel/core": "^7.6.2",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/preset-env": "^7.6.2",
-    "@vue/cli-service": "^3.11.0",
-    "babel-loader": "^8.0.6",
-    "cross-env": "^6.0.3",
-    "css-loader": "^3.2.0",
-    "html-webpack-plugin": "^3.2.0",
-    "node-sass": "^4.12.0",
-    "sass-loader": "^8.0.0",
-    "style-loader": "^1.0.0",
-    "vue-loader": "^15.7.1",
-    "webpack": "^4.41.0",
+    "webpack": "^4.41.1",
     "webpack-cli": "^3.3.9"
-  },
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
   }
 }
