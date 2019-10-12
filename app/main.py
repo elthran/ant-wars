@@ -25,4 +25,4 @@ def grow():
     if randint(1, 100) > 100:
         colony.birth_ant()
 
-    return render_template('colony.html', age=world.age, nest=str(nest).split())
+    return render_template('colony.pug', age=world.age, nest=str(nest).split())

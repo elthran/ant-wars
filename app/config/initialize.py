@@ -42,6 +42,8 @@ def load_extensions(app):
         create_database(engine.url)
     db.init_app(app)
 
+    app.jinja_env.add_extension('pypugjs.ext.jinja.PyPugJSExtension')
+
 
 def load_hooks(app):
     hooks.add_auto_commit(app, db)
