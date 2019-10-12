@@ -26,6 +26,6 @@ def grow():
         colony.birth_ant()
 
     response = "Frame {frame}<br>".format(frame=world.age)
-    response += str(nest)
+    response += str(nest).replace('\n', '<br>')  # maybe a template ... or json
 
     return response
