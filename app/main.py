@@ -15,17 +15,17 @@ initialize(app, models=[World, Ant, Colony, Nest])
 
 
 @app.route('/')
-def main():
+def grow():
     world = World.query.first()
-    player1 = Colony.query.first()
-    player1_nest = Nest.query.first()
+    colony = Colony.query.first()  # current_user.colony
+    nest = Nest.query.first()
+
+    world.age += 1
+    colony.move_ants()
+    if randint(1, 100) > 100:
+        colony.birth_ant()
 
     response = "Frame {frame}<br>".format(frame=world.age)
-    response += str(player1_nest)
-    for ant in player1.ants:
-        ant.move()
-    world.age += 1
-    if randint(1, 100) > 100:
-        player1.birth_ant()
+    response += str(nest)
 
     return response
