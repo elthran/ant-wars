@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+from flask import Flask
 
 from .extensions import flask_db as db
 from . import private_config
@@ -7,7 +8,9 @@ from . import environment
 from . import hooks
 
 
-def initialize(app, models=None):
+def initialize(name, models=None):
+    app = Flask(name.split('.')[0], static_url_path='', static_folder='dist')
+
     load_configs(app)
     load_extensions(app)
     load_hooks(app)
