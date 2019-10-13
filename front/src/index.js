@@ -1,12 +1,11 @@
 import Vue from 'vue'
-// import VueKonva from 'vue-konva'
+import VueKonva from 'vue-konva'
 
 import App from './App'
 
 
-// Vue.use(VueKonva)
+Vue.use(VueKonva)
 
-/* eslint-disable no-new */
 new Vue({
   el: '#app',
   components: { App },
