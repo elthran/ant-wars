@@ -1,7 +1,7 @@
 from random import randint
 from time import sleep
 
-from flask import Flask, render_template
+from flask import render_template, send_from_directory
 
 from .config.initialize import initialize
 
@@ -14,6 +14,11 @@ app = initialize(__name__, models=[World, Ant, Colony, Nest])
 
 
 @app.route('/')
+def root():
+    return send_from_directory('dist', 'index.html')
+
+
+@app.route('/grow')
 def grow():
     world = World.query.first()
     colony = Colony.query.first()  # current_user.colony

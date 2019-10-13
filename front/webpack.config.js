@@ -8,7 +8,7 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js', // default entry point
   output: {
-    path: path.join(__dirname, 'dist'), // default path
+    path: path.join(__dirname, '..', 'app', 'dist'), // default path
     filename: '[name].bundle.js', // default filename
   },
   module: {
@@ -92,7 +92,6 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: '!!raw-loader!pug-plain-loader?pretty=true!./static/index.pug',
-      minimize: false,
     }),
     new VueLoaderPlugin(),
   ],
