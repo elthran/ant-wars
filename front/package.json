@@ -27,7 +27,9 @@
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
+    "konva": "^4.0.14",
     "vue": "^2.6.10",
+    "vue-konva": "^2.0.11",
     "webpack-merge": "^4.2.2"
   }
 }

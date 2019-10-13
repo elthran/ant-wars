@@ -3164,6 +3164,11 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
 
+konva@^4.0.14:
+  version "4.0.14"
+  resolved "https://registry.yarnpkg.com/konva/-/konva-4.0.14.tgz#900dd13b4efd31796ef5fc6fefafb475aa1899f8"
+  integrity sha512-6I+Yp3/vsFC4tNjhX1NzS7kvoY5nU7TzQi+OF+Gza1+tQfQYjMLeD7D912Hz8+sZzCtOJfmn5XbQsYu87VKbXg==
+
 lazy-cache@^1.0.3:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/lazy-cache/-/lazy-cache-1.0.4.tgz#a1d78fc3a50474cb80845d3b3b6e1da49a446e8e"
@@ -5399,6 +5404,11 @@ vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
+
+vue-konva@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/vue-konva/-/vue-konva-2.0.11.tgz#227c5a4d42ea88ca5f868cf231d0ee5b2f529d70"
+  integrity sha512-8Kzw35iPBbnr+hBKVCu0jHm3rpfmeRYSj7TnoLJRDLWnbjWeL6DVaelWzyKq9yvtLsss/iKEQ2JX3V8CyH6p7A==
 
 vue-loader@^15.7.1:
   version "15.7.1"
