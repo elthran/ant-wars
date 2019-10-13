@@ -91,7 +91,8 @@ module.exports = {
     // plugins customize the webpack build process in a variety of ways
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'static', 'index.pug'),
+      template: '!!raw-loader!pug-plain-loader?pretty=true!./static/index.pug',
+      minimize: false,
     }),
     new VueLoaderPlugin(),
   ],
