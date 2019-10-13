@@ -18,6 +18,11 @@ export default {
 }
 </script>
 
-<style type="text/sass" scoped>
-
+<style lang="sass">
+// global styles
+body
+  box-sizing: border-box
+  margin: 0
+  padding: 0
+  overflow: hidden
 </style>

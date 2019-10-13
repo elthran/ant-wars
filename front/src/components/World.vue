@@ -1,18 +1,23 @@
 <template lang="pug">
   v-stage#world(:config="configKonva")
+    grid(
+      :width="width"
+      :height="height"
+    )
       v-layer
         v-circle(:config="configCircle")
 </template>
 
 <script>
+import Grid from './Grid'
+
 export default {
   name: 'World',
+  components: {
+    Grid
+  },
   data () {
     return {
-      configKonva: {
-        width: 200,
-        height: 200,
-      },
       configCircle: {
         x: 100,
         y: 100,
@@ -23,5 +28,22 @@ export default {
       },
     }
   },
+  computed: {
+    width () { return window.innerWidth },
+    height () { return window.innerHeight },
+    configKonva () {
+      return {
+        width: this.width,
+        height: this.height,
+      }
+    },
+  },
+  mounted () {
+    // console.log('this.width', this.width)
+  }
 }
 </script>
+
+<style lang='sass' scoped>
+</style>
+
