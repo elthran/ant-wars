@@ -1,7 +1,7 @@
 from random import randint
 from time import sleep
 
-from flask import render_template, send_from_directory
+from flask import render_template, send_from_directory, jsonify
 
 from .config.initialize import initialize
 
@@ -29,4 +29,7 @@ def grow():
     if randint(1, 100) > 100:
         colony.birth_ant()
 
-    return render_template('colony.pug', age=world.age, nest=str(nest).split())
+    return jsonify(
+        age=world.age,
+        nest=str(nest).split()
+    )
