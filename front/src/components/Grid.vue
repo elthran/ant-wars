@@ -1,10 +1,21 @@
 <template lang="pug">
   v-layer#grid
     v-rect(:config="configBackground")
-    //- v-line
+    v-group#horizontal-lines(
+      v-for="offset in horizontalLines"
+      :key="offset.id"
+    )
+      v-line(:config="buildHorizontalConfigLine(offset)")
+    v-group#vertical-lines(
+      v-for="offset in verticalLines"
+      :key="offset.id"
+    )
+      v-line(:config="buildVerticalConfigLine(offset)")
 </template>
 
 <script>
+import { cloneDeep } from 'lodash'
+
 export default {
   name: 'Grid',
   components: {
@@ -20,16 +31,57 @@ export default {
         y: 0,
         width: this.width,
         height: this.height,
-        fill: 'black',
-      }
+        fill: '#262626',
+      },
+      lineOffset: 25,
+      configLine: {
+        points: [0, 0, 0, 0],
+        stroke: '#f2f2f2',
+        strokeWidth: 3,
+      },
     }
   },
-  computed: {},
-  mounted () {
-    // console.log('this.width', this.width)
-    // console.log('this.height', this.height)
+  computed: {
+    horizontalLines () {
+      return this.buildLineOffsets(this.height)
+    },
+    verticalLines () {
+      return this.buildLineOffsets(this.width)
+    }
   },
-  methods: {},
+  mounted () {
+    console.log('this.horizontalLines()', this.horizontalLines)
+  },
+  methods: {
+    buildLineOffsets (maximum) {
+      let lineOffsets = []
+      let line = 1
+      let offset
+
+      do {
+        offset = line * this.lineOffset
+        lineOffsets.push(offset)
+        line++
+      } while (offset < maximum)
+      return lineOffsets
+    },
+    buildHorizontalConfigLine (offset) {
+      let config = cloneDeep(this.configLine)
+      config.points[1] = offset
+      config.points[2] = this.width
+      config.points[3] = offset
+
+      return config
+    },
+    buildVerticalConfigLine (offset) {
+      let config = cloneDeep(this.configLine)
+      config.points[0] = offset
+      config.points[2] = offset
+      config.points[3] = this.height
+
+      return config
+    },
+  },
 }
 </script>
 

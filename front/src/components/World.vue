@@ -4,8 +4,8 @@
       :width="width"
       :height="height"
     )
-      v-layer
-        v-circle(:config="configCircle")
+    v-layer
+      v-circle(:config="configCircle")
 </template>
 
 <script>
@@ -39,6 +39,7 @@ export default {
     },
   },
   mounted () {
+    // layer.draw()
     // console.log('this.width', this.width)
   }
 }
