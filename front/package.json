@@ -5,8 +5,8 @@
   "author": "Marlen Brunner",
   "license": "MIT",
   "scripts": {
-    "build": "webpack",
-    "watch": "webpack --watch"
+    "build": "webpack --config config/webpack.config.js",
+    "watch": "webpack --watch --config config/webpack.config.js"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -27,6 +27,7 @@
     "webpack-cli": "^3.3.9"
   },
   "dependencies": {
-    "vue": "^2.6.10"
+    "vue": "^2.6.10",
+    "webpack-merge": "^4.2.2"
   }
 }

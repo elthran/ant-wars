@@ -1,16 +1,8 @@
-// webpack.config.js
-const path = require('path')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+// vue.config.js
+
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
-  mode: 'development',
-  entry: './src/index.js', // default entry point
-  output: {
-    path: path.join(__dirname, '..', 'app', 'dist'), // default path
-    filename: '[name].bundle.js', // default filename
-  },
   module: {
     // configuration regarding modules
     rules: [
@@ -18,13 +10,6 @@ module.exports = {
       {
         test: /\.vue$/,
         loader: 'vue-loader',
-      },
-      // this will apply to both plain `.js` files
-      // AND `<script>` blocks in `.vue` files
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
       },
       {
         test: /\.pug$/,
@@ -81,18 +66,11 @@ module.exports = {
     ],
   },
   resolve: {
-    alias: {
-      "@": path.join(__dirname, 'src'),
-    },
     // file types to load
-    extensions: ['.sass', '.vue', '.js', '.json'],
+    extensions: ['.sass', '.vue'],
   },
   plugins: [
     // plugins customize the webpack build process in a variety of ways
-    new CleanWebpackPlugin(),
-    new HtmlWebpackPlugin({
-      template: '!!raw-loader!pug-plain-loader?pretty=true!./static/index.pug',
-    }),
     new VueLoaderPlugin(),
   ],
 }
