@@ -1,1 +1,2 @@
-console.log("HELLO WEBPACK WORLD!")
+import Vue from 'vue'
+import App from './App'
