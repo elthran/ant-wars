@@ -4,28 +4,21 @@
       :width="width"
       :height="height"
     )
-    v-layer
-      v-circle(:config="configCircle")
+    ants
 </template>
 
 <script>
 import Grid from './Grid'
+import Ants from './Ants'
 
 export default {
   name: 'World',
   components: {
-    Grid
+    Grid,
+    Ants,
   },
   data () {
     return {
-      configCircle: {
-        x: 100,
-        y: 100,
-        radius: 70,
-        fill: "red",
-        stroke: "black",
-        strokeWidth: 4,
-      },
     }
   },
   computed: {
