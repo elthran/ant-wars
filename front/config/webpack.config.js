@@ -2,10 +2,12 @@
 const path = require('path')
 const merge = require('webpack-merge')
 
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const vueConfig = require('./vue.config.js')
-const htmlConfig = require('./html.config.js')
 const babelConfig = require('./babel.config.js')
+const cleanerConfig = require('./cleaner.config.js')
+const copyConfig = require('./copy.config.js')
+const fileConfig = require('./file.config.js')
+const htmlConfig = require('./html.config.js')
+const vueConfig = require('./vue.config.js')
 
 const basePath = path.normalize(path.join(__dirname, '..', '..'))
 
@@ -31,8 +33,15 @@ const baseConfig = {
   },
   plugins: [
     // plugins customize the webpack build process in a variety of ways
-    new CleanWebpackPlugin(),
   ],
 }
 
-module.exports = merge(baseConfig, htmlConfig, babelConfig, vueConfig)
+module.exports = merge(
+  baseConfig,
+  cleanerConfig,
+  copyConfig,
+  fileConfig,
+  htmlConfig,
+  babelConfig,
+  vueConfig
+)
