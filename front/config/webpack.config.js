@@ -1,4 +1,5 @@
 // webpack.config.js
+
 const path = require('path')
 const merge = require('webpack-merge')
 
@@ -26,7 +27,7 @@ const baseConfig = {
   },
   resolve: {
     alias: {
-      "@": path.join(process.env.PWD, 'src'),
+      '@': path.join(process.env.PWD, 'src'),
     },
     // file types to load
     extensions: ['.js', '.json'],
