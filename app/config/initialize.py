@@ -4,12 +4,14 @@ from sqlalchemy_utils import database_exists, create_database
 from .extensions import flask_db as db
 from . import private_config
 from . import environment
+from . import commands
 from . import hooks
 
 
 def initialize(app, models=None):
     load_configs(app)
     load_extensions(app)
+    load_commands(app)
     load_hooks(app)
     load_models(models)
 
@@ -34,6 +36,10 @@ def load_configs(app):
     app.config.from_object(private_config)
     config = getattr(environment, f'{env}Config')
     app.config.from_object(config)
+
+
+def load_commands(app):
+    app.cli.add_command(commands.db_cli)
 
 
 def load_extensions(app):
