@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import Grid from './Grid'
 import Ants from './Ants'
+import Grid from './Grid'
 
 export default {
   name: 'World',
