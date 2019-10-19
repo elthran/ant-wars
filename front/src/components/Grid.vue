@@ -18,13 +18,12 @@ import { cloneDeep } from 'lodash'
 
 export default {
   name: 'Grid',
-  components: {
-  },
+  components: {},
   props: {
     width: Number,
     height: Number,
   },
-  data () {
+  data() {
     return {
       configBackground: {
         x: 0,
@@ -42,17 +41,16 @@ export default {
     }
   },
   computed: {
-    horizontalLines () {
+    horizontalLines() {
       return this.buildLineOffsets(this.height)
     },
-    verticalLines () {
+    verticalLines() {
       return this.buildLineOffsets(this.width)
-    }
+    },
   },
-  mounted () {
-  },
+  mounted() {},
   methods: {
-    buildLineOffsets (maximum) {
+    buildLineOffsets(maximum) {
       let lineOffsets = []
       let line = 1
       let offset
@@ -64,7 +62,7 @@ export default {
       } while (offset < maximum)
       return lineOffsets
     },
-    buildHorizontalConfigLine (offset) {
+    buildHorizontalConfigLine(offset) {
       let config = cloneDeep(this.configLine)
       config.points[1] = offset
       config.points[2] = this.width
@@ -72,7 +70,7 @@ export default {
 
       return config
     },
-    buildVerticalConfigLine (offset) {
+    buildVerticalConfigLine(offset) {
       let config = cloneDeep(this.configLine)
       config.points[0] = offset
       config.points[2] = offset
@@ -84,7 +82,7 @@ export default {
 }
 </script>
 
-<style lang='sass' scoped>
+<style lang="sass" scoped>
 // .grid
 //   background: black
 //   width: 100vh
