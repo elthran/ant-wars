@@ -20,8 +20,30 @@ export default {
   name: 'Grid',
   components: {},
   props: {
-    width: Number,
-    height: Number,
+    background: {
+      type: String,
+      default: '#262626', // off-black
+    },
+    height: {
+      type: Number,
+      required: true,
+    },
+    lineColour: {
+     type: String,
+      default: '#f2f2f2', // off-white
+    },
+    gridSpacing: {
+      type: Number,
+      default: 50,
+    },
+    lineWidth: {
+      type: Number,
+      default: 3,
+    },
+    width: {
+      type: Number,
+      required: true,
+    },
   },
   data() {
     return {
@@ -30,13 +52,12 @@ export default {
         y: 0,
         width: this.width,
         height: this.height,
-        fill: '#262626',
+        fill: this.background,
       },
-      lineOffset: 25,
-      configLine: {
+      configLineBase: {
         points: [0, 0, 0, 0],
-        stroke: '#f2f2f2',
-        strokeWidth: 3,
+        stroke: this.lineColour,
+        strokeWidth: this.lineWidth,
       },
     }
   },
@@ -56,14 +77,14 @@ export default {
       let offset
 
       do {
-        offset = line * this.lineOffset
+        offset = line * this.gridSpacing
         lineOffsets.push(offset)
         line++
       } while (offset < maximum)
       return lineOffsets
     },
     buildHorizontalConfigLine(offset) {
-      let config = cloneDeep(this.configLine)
+      let config = cloneDeep(this.configLineBase)
       config.points[1] = offset
       config.points[2] = this.width
       config.points[3] = offset
@@ -71,7 +92,7 @@ export default {
       return config
     },
     buildVerticalConfigLine(offset) {
-      let config = cloneDeep(this.configLine)
+      let config = cloneDeep(this.configLineBase)
       config.points[0] = offset
       config.points[2] = offset
       config.points[3] = this.height

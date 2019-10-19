@@ -3,6 +3,8 @@
     grid(
       :width="width"
       :height="height"
+      :line-width="1"
+      :gridSpacing="25"
     )
     ants
 </template>
