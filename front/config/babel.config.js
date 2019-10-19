@@ -1,5 +1,4 @@
-// html.config.js
-
+// babel.config.js
 
 module.exports = {
   module: {
