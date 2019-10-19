@@ -1,6 +1,10 @@
 <template lang="pug">
   v-layer
-    k-image(:config="imageConfig")
+    v-group(
+      v-for="ant in ants"
+      :key="ant.id"
+    )
+      k-image(:config="buildAntConfig(ant)")
 </template>
 
 <script>
@@ -12,13 +16,19 @@ export default {
     KImage
   },
   props: {
-
+    ants: {
+      type: Array,
+      default () {
+        return []
+      },
+    },
   },
   data () {
     return {
-      imageConfig: {
-        x: 200,
-        y: 50,
+      antBaseConfig: {
+        x: 0,
+        y: 0,
+        type: 'ant',
         src: '/assets/images/ant.jpg',
       },
     }
@@ -26,7 +36,15 @@ export default {
   computed: {},
   mounted () {
   },
-  methods: {},
+  methods: {
+    buildAntConfig (ant) {
+      return {
+        ...this.antBaseConfig,
+        ...ant,
+        src: `/assets/images/${ant.type || 'ant'}.jpg`,
+      }
+    }
+  },
 }
 </script>
 
