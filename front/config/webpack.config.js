@@ -35,6 +35,9 @@ const baseConfig = {
   plugins: [
     // plugins customize the webpack build process in a variety of ways
   ],
+  watchOptions: {
+    ignored: /node_modules/,
+  },
 }
 
 module.exports = merge(
