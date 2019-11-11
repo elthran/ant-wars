@@ -1,7 +1,7 @@
 from random import randint
 from time import sleep
 
-from flask import Flask, render_template
+from flask import render_template, send_from_directory, jsonify
 
 from .config.initialize import initialize
 
@@ -10,11 +10,15 @@ from .models.ants import Ant
 from .models.colonies import Colony
 from .models.nests import Nest
 
-app = Flask(__name__.split('.')[0])
-initialize(app, models=[World, Ant, Colony, Nest])
+app = initialize(__name__, models=[World, Ant, Colony, Nest])
 
 
 @app.route('/')
+def root():
+    return send_from_directory('dist', 'index.html')
+
+
+@app.route('/grow')
 def grow():
     world = World.query.first()
     colony = Colony.query.first()  # current_user.colony
@@ -25,4 +29,7 @@ def grow():
     if randint(1, 100) > 100:
         colony.birth_ant()
 
-    return render_template('colony.pug', age=world.age, nest=str(nest).split())
+    return jsonify(
+        age=world.age,
+        nest=str(nest).split()
+    )

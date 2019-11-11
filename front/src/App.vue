@@ -1,16 +1,15 @@
-<template>
-  <div id="app">
-    <hello-world />
-  </div>
+<template lang='pug'>
+  #app
+    world
 </template>
 
 <script>
-import HelloWorld from '@/components/HelloWorld'
+import World from '@/components/World'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    World
   },
   data () {
     return {
@@ -19,8 +18,6 @@ export default {
 }
 </script>
 
-<style type="text/scss">
-.hello-world {
-  color: red;
-}
+<style type="text/sass" scoped>
+
 </style>
