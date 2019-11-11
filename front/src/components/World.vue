@@ -15,12 +15,16 @@
 <script>
 import Ants from './Ants'
 import Grid from './Grid'
+import Leaves from './Leaves'
 
 export default {
   name: 'World',
   components: {
     Grid,
     Ants,
+    Leaves,
+  },
+  props: {
   },
   data () {
     return {
