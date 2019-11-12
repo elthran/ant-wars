@@ -31,5 +31,5 @@ def grow():
 
     return jsonify(
         age=world.age,
-        nest=str(nest).split()
+        colony=colony,  # build serializer
     )
