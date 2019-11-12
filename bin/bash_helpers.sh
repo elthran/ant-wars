@@ -19,3 +19,7 @@ randpw() {
 rstrip() {
     sed -e 's/^[ \t]*//' | sed '0,/^$/{//d}'
 }
+
+package_exists() {
+    return dpkg -l "$1" &> /dev/null
+}
