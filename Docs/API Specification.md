@@ -3,17 +3,21 @@ The API will eventuall support:
 To prioritize, just push everything into the first route for now.
 Each additional route will return a subset of the previous route.
 
-/colonies
-/colony/#id
-/colony/#id/ants
-/colony/#id/ant/#id
-/colony/#id/tunnels
-/colony/#id/tunnel/#id
-/colony/#id/leaves
-/colony/#id/leaf/#id
+`/api/worlds`
+`/api/world/#id`
+`/api/world/#id/colonies`
+`/api/colony/#id`
+`/api/world/#id/colony/#id/ants`
+`/api/ant/#id`
+`/api/world/#id/colony/#id/tunnels`
+`/api/tunnel/#id`
+`/api/world/#id/colony/#id/leaves`
+`/api/leaf/#id`
 
 ```JSON
 {
+  "id": 1,
+  "age": 13,
   "colonies": [
     {
       "id": 1,
