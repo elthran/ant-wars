@@ -9,6 +9,8 @@ class Ant(GameState):
     x_pos = db.Column(db.Integer)
     y_pos = db.Column(db.Integer)
     size = db.Column(db.Integer)
+    caste = db.Column(db.String(20))
+    carrying = db.Column(db.Boolean)
 
     def __init__(self, colony_id, nest_id, x_pos, y_pos):
         self.colony_id = colony_id
@@ -16,6 +18,8 @@ class Ant(GameState):
         self.x_pos = x_pos
         self.y_pos = y_pos
         self.size = 5
+        self.caste = 'worker'
+        self.carrying = False
 
     def perform_action(self):
         actions = ['pass', 'move', 'dig']

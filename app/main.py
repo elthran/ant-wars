@@ -10,6 +10,10 @@ from .models.ants import Ant
 from .models.colonies import Colony
 from .models.nests import Nest
 
+from .serializers.colony_serializer import ColonySerializer
+from .serializers.ant_serializer import AntSerializer
+
+
 app = initialize(__name__, models=[World, Ant, Colony, Nest])
 
 
@@ -32,4 +36,22 @@ def grow():
     return jsonify(
         age=world.age,
         colony=colony,  # build serializer
+        # colony=ColonySerializer.render(colony)
+    )
+
+@app.route('/colony/<int:id>')
+def colony(id):
+    colony = Colony.query.get(id)
+
+    return jsonify(
+        colony=ColonySerializer.render(colony)
+    )
+
+
+@app.route('/ant/<int:id>')
+def ant(id):
+    ant = Ant.query.get(id)
+
+    return jsonify(
+        colony=AntSerializer.render(ant)
     )
