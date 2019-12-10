@@ -27,3 +27,4 @@ class Colony(GameState):
 
     def kill_ant(self, ant):
         pass
+

@@ -13,6 +13,8 @@ from .models.nests import Nest
 from .serializers.colony_serializer import ColonySerializer
 from .serializers.ant_serializer import AntSerializer
 
+from .api.colony_controller import ColonyController
+
 
 app = initialize(__name__, models=[World, Ant, Colony, Nest])
 
@@ -39,13 +41,8 @@ def grow():
         # colony=ColonySerializer.render(colony)
     )
 
-@app.route('/colony/<int:id>')
-def colony(id):
-    colony = Colony.query.get(id)
 
-    return jsonify(
-        colony=ColonySerializer.render(colony)
-    )
+app.add_url_rule('/colony/<int:id>', view_func=ColonyController.as_view('colony_controller'))
 
 
 @app.route('/ant/<int:id>')
