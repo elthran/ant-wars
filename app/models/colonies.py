@@ -8,21 +8,35 @@ class Colony(GameState):
     species = db.Column(db.String(32))
     nests = db.relationship('Nest', backref='colony')
     ants = db.relationship('Ant', backref='colony')
+    goal = db.Column(db.String(20))
 
     def __init__(self, world_id, user_id):
         self.world_id = world_id
         self.user_id = user_id
         self.species = 'black'
+        self.goal = 'pass'
+
+    def update_goal(self, new_goal):
+        if new_goal in ('scout', 'feed', 'pass'):
+            self.goal = new_goal
+        else:
+            pass
+        for ant in self.ants:
+            ant.get_new_task()
 
     def move_ants(self):
         for ant in self.ants:
             ant.perform_action()
 
     def birth_ant(self, x_pos=0, y_pos=0, role='basic'):
-        ant_role_mapper = {
-            'basic': Ant(colony_id=self.id, x_pos=10, y_pos=10),
-            }
-        self.ants.append(ant_role_mapper[role])
+        if len(self.nests) > 0:
+            first_nest = self.nests[0]
+            ant_role_mapper = {
+                'basic': Ant(colony_id=self.id, x_pos=first_nest.entrance_x_pos, y_pos=first_nest.entrance_y_pos),
+                }
+            self.ants.append(ant_role_mapper[role])
+        else:
+            pass
 
     def kill_ant(self, ant):
         pass

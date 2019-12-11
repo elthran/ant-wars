@@ -10,9 +10,6 @@ from .models.colonies import Colony
 from .models.nests import Nest
 from .models.users import User
 
-from .serializers.ant_serializer import AntSerializer
-from .serializers.colony_serializer import ColonySerializer
-
 from .api.colony_controller import ColonyController
 from .api.ant_controller import AntController
 from .serializers.world_serializer import WorldSerializer
@@ -30,11 +27,10 @@ def grow():
     world = World.query.first()
     colony = Colony.query.first()  # current_user.colony
 
-    # colony.birth_ant()
-
     world.age += 1
     colony.move_ants()
-    if randint(1, 100) > 15:
+
+    if randint(1, 100) > 95:
         colony.birth_ant()
 
     return jsonify(
@@ -48,11 +44,25 @@ app.add_url_rule('/colony/<int:_id>', view_func=ColonyController.as_view('colony
 app.add_url_rule('/colony/<int:_id>', view_func=AntController.as_view('ant_controller'))
 
 
-
-
-@app.route('/ant/<int:_id>')
-def ant(_id):
-    ant = Ant.query.get(_id)
+@app.route('/change_colony_goal/<string:new_goal>')
+def change_colony_goal(new_goal):
+    world = World.query.first()
+    colony = Colony.query.first()  # current_user.colony
+    colony.update_goal(new_goal)
     return jsonify(
-        ant=AntSerializer.render(ant)
+        age=world.age,
+        world=WorldSerializer.render(world)
+    )
+
+
+@app.route('/dig_nest')
+def dig_nest():
+    world = World.query.first()
+    colony = Colony.query.first()  # current_user.colony
+    if len(colony.nests) == 0:
+        nest = Nest(colony.id, world.height // 2, world.width // 2)
+        nest.save()
+    return jsonify(
+        age=world.age,
+        world=WorldSerializer.render(world)
     )

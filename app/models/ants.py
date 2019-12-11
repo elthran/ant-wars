@@ -10,6 +10,7 @@ class Ant(GameState):
     size = db.Column(db.Integer)
     caste = db.Column(db.String(20))
     carrying = db.Column(db.Boolean)
+    task = db.Column(db.String(20))
 
     def __init__(self, colony_id, x_pos, y_pos):
         self.colony_id = colony_id
@@ -18,61 +19,52 @@ class Ant(GameState):
         self.size = 5
         self.caste = 'worker'
         self.carrying = False
+        self.task = 'pass'
+
+    def get_new_task(self):
+        new_tasks = ['scout', 'feed', 'pass']
+        weights = []
+        for item in new_tasks:
+            if item == self.colony.goal:
+                weights.append(10)
+            else:
+                weights.append(1)
+        self.task = random.choices(new_tasks, weights=weights)[0]
 
     def perform_action(self):
-        actions = ['pass']
+        """
+        Perform an action and then get your newly assigned task.
+        """
         ant_action_mapper = {'pass': self.sit_idle,
-                             'move': self.move,
-                             'dig': self.dig}
-        action = random.choice(actions)
-        print("Ant{id} is at position ({x},{y}) and is performing {action}".format(id=self.id,
-                                                                                   x=self.x_pos,
-                                                                                   y=self.y_pos,
-                                                                                   action=action))
-        try:
-            print("Attempting to:", action)
-            ant_action_mapper[action]()
-        except:
-            raise EnvironmentError("The ant has broken.")
+                             'scout': self.move,
+                             'feed': self.find_food}
+        action_completed = ant_action_mapper[self.task]()
+        if action_completed:
+            self.get_new_task()
 
     def sit_idle(self):
-        pass
-
-    def get_adjacent_locations(self):
-        adjacent_locations, valid_x_pos, valid_y_pos = [], [self.x_pos], [self.y_pos]
-        if self.x_pos < self.nest.width - 1:
-            valid_x_pos += [self.x_pos + 1]
-        if self.x_pos > 0:
-            valid_x_pos += [self.x_pos - 1]
-        if self.y_pos < self.nest.height - 1:
-            valid_y_pos += [self.y_pos + 1]
-        if self.y_pos < 0:
-            valid_y_pos += [self.y_pos - 1]
-        for x in valid_x_pos:
-            for y in valid_y_pos:
-                if x != self.x_pos or y != self.y_pos:
-                    adjacent_locations.append((x, y))
-        return adjacent_locations
+        return True
 
     def move(self):
-        list_of_all_possible_moves = self.get_adjacent_locations()
-        list_of_all_possible_moves = [location for location in list_of_all_possible_moves if
-                                      location in self.nest.get_coordinates_of_all_tunnels()]
-        random.shuffle(list_of_all_possible_moves)
-        for each in list_of_all_possible_moves:
-            if each in self.nest.get_coordinates_of_all_tunnels():
-                print("Was at:", self.x_pos, self.y_pos)
-                self.x_pos, self.y_pos = each[0], each[1]
-                print("Moved to:", self.x_pos, self.y_pos)
-                break
+        possible_x_coordinates = []
+        possible_y_coordinates = []
+        for i in range(-1, 2):
+            if 0 <= self.x_pos + i <= self.colony.world.width:
+                possible_x_coordinates.append(self.x_pos + i)
+            if 0 <= self.y_pos + i <= self.colony.world.height:
+                possible_y_coordinates.append(self.y_pos + i)
+        self.x_pos = random.choice(possible_x_coordinates)
+        self.y_pos = random.choice(possible_y_coordinates)
+        return True
 
-    def dig(self):
-        list_of_all_possible_moves = self.get_adjacent_locations()
-        random.shuffle(list_of_all_possible_moves)
-        for each in list_of_all_possible_moves:
-            if each not in self.nest.get_coordinates_of_all_tunnels():
-                print("Was at:", self.x_pos, self.y_pos)
-                self.x_pos, self.y_pos = each[0], each[1]
-                self.nest.dig_tunnel(each[0], each[1])
-                print("Dug to:", self.x_pos, self.y_pos)
-                break
+    def find_food(self):
+        possible_x_coordinates = []
+        possible_y_coordinates = []
+        for i in range(-1, 2):
+            if 0 <= self.x_pos + i <= self.colony.world.width:
+                possible_x_coordinates.append(self.x_pos + i)
+            if 0 <= self.y_pos + i <= self.colony.world.height:
+                possible_y_coordinates.append(self.y_pos + i)
+        self.x_pos = random.choice(possible_x_coordinates)
+        self.y_pos = random.choice(possible_y_coordinates)
+        return True

@@ -9,5 +9,6 @@ class AntSerializer:
             pos=[ant.x_pos, ant.y_pos],
             size=ant.size,
             carrying=ant.carrying,
-            caste=ant.caste
+            caste=ant.caste,
+            task=ant.task
         )
