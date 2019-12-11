@@ -55,16 +55,13 @@ class Ant(GameState):
                 possible_y_coordinates.append(self.y_pos + i)
         self.x_pos = random.choice(possible_x_coordinates)
         self.y_pos = random.choice(possible_y_coordinates)
+        object_encountered = self.colony.world.get_object_at_location(self.x_pos, self.y_pos)
+        if object_encountered.__class__.__name__ == 'Food':
+            # Would prefer to do below, but don't want to import Food objects. Maybe move to template class
+            # if isinstance(object_encountered, Food):
+            self.colony.food_reserves += 1
+            object_encountered.destroy_self()
         return True
 
     def find_food(self):
-        possible_x_coordinates = []
-        possible_y_coordinates = []
-        for i in range(-1, 2):
-            if 0 <= self.x_pos + i <= self.colony.world.width:
-                possible_x_coordinates.append(self.x_pos + i)
-            if 0 <= self.y_pos + i <= self.colony.world.height:
-                possible_y_coordinates.append(self.y_pos + i)
-        self.x_pos = random.choice(possible_x_coordinates)
-        self.y_pos = random.choice(possible_y_coordinates)
-        return True
+        self.move()

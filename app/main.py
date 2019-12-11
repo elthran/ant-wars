@@ -1,4 +1,4 @@
-from random import randint
+import random
 
 from flask import send_from_directory, jsonify
 
@@ -25,13 +25,14 @@ def root():
 @app.route('/grow')
 def grow():
     world = World.query.first()
-    colony = Colony.query.first()  # current_user.colony
 
     world.age += 1
-    colony.move_ants()
+    if random.randint(1, 10) == 10:
+        world.generate_food()
 
-    if randint(1, 100) > 95:
-        colony.birth_ant()
+    colonies = Colony.query.all()
+    for colony in colonies:
+        colony.advance_time()
 
     return jsonify(
         age=world.age,

@@ -1,4 +1,5 @@
 from .colony_serializer import ColonySerializer
+from .food_serializer import FoodSerializer
 
 
 class WorldSerializer:
@@ -9,5 +10,6 @@ class WorldSerializer:
     def render(cls, world):
         return dict(
             id=world.id,
-            colonies=[ColonySerializer.render(colony) for colony in world.colonies]
+            colonies=[ColonySerializer.render(colony) for colony in world.colonies],
+            foods=[FoodSerializer.render(food) for food in world.foods]
         )

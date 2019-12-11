@@ -13,7 +13,8 @@ class ColonySerializer:
         return dict(
             id=colony.id,
             goal=colony.goal,
-            user_id=colony.user_id,
+            username=colony.user.username,
             ants=[AntSerializer.render(ant) for ant in colony.ants],
-            nest_entrance=nest_entrance
+            nest_entrance=nest_entrance,
+            food_reserves=colony.food_reserves
         )
