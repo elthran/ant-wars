@@ -16,3 +16,12 @@ Use
 
 curl "http://127.0.0.1:5000/colony/1" -X PUT -d'{"id":1}' -H "Content-Type: application/json"
 to send commands to the API
+
+
+
+
+Basic Game:
+
+one world object with a size and colonies
+
+each colony has the list of ants

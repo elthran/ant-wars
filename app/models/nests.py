@@ -4,7 +4,6 @@ from .tunnels import Tunnel
 
 class Nest(GameState):
     colony_id = db.Column(db.Integer, db.ForeignKey('colony.id'), nullable=False)
-    ants = db.relationship('Ant', backref='nest')
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)
     entrance_x_pos = db.Column(db.Integer)
