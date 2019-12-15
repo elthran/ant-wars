@@ -9,12 +9,13 @@ from .models.ants import Ant
 from .models.colonies import Colony
 from .models.nests import Nest
 from .models.users import User
+from .models.maps import Map
 
 from .api.colony_controller import ColonyController
 from .api.ant_controller import AntController
 from .serializers.world_serializer import WorldSerializer
 
-app = initialize(__name__, models=[World, Ant, Colony, Nest, User])
+app = initialize(__name__, models=[World, Map, Ant, Colony, Nest, User])
 
 
 @app.route('/')
@@ -25,12 +26,16 @@ def root():
 @app.route('/grow')
 def grow():
     world = World.query.first()
+    colonies = Colony.query.all()
+
+    for colony in colonies:
+        colony.food_reserves += 1
+        colony.birth_ant()
 
     world.age += 1
-    if random.randint(1, 10) == 10:
+    if random.randint(1, 10) < 10:
         world.generate_food()
 
-    colonies = Colony.query.all()
     for colony in colonies:
         colony.advance_time()
 

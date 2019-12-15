@@ -29,15 +29,11 @@ def initialize(name, models=None):
         player.save()
         player_colony_1 = Colony(game_world.id, player.id)
         player_colony_1.save()
-        player_ant_1 = Ant(player_colony_1.id, 20, 20)
-        player_ant_1.save()
 
         ai = User("computer_easy")
         ai.save()
         ai_colony_1 = Colony(game_world.id, ai.id)
         ai_colony_1.save()
-        ai_ant_1 = Ant(ai_colony_1.id, 20, 20)
-        ai_ant_1.save()
 
         db.session.commit()
 
