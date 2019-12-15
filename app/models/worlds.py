@@ -6,6 +6,8 @@ from .maps import Map
 from .foods import Food
 from .templates import db, GameState
 
+import pdb
+
 
 class World(GameState):
     colonies = db.relationship('Colony', backref='world')
@@ -24,30 +26,32 @@ class World(GameState):
         self.width = 50
         self.height = 50
 
-    def add_object(self, _object):
-        if self.maps.get((_object.x_pos, _object.y_pos)) is None:
-            new_map = Map(self.id, _object.x_pos, _object.y_pos, "ant_guy")
-            new_map.save()
-        else:
-            print("conflict at:", _object.x_pos, _object.y_pos)
-        # self.maps[(_object.x_pos, _object.y_pos)] = _object
+    def move(self, old_x, old_y, new_x, new_y):
+        object_at_location = Map.get_object_at_location(new_x, new_y)
+        if object_at_location:
+            return object_at_location
+
+    def add_object(self, object_to_be_added):
+        new_mapping = Map.add_object(self.id, object_to_be_added)
+        if new_mapping:
+            object_to_be_added.save()
+            new_mapping.ref_id = object_to_be_added.id
+
+    def remove_object(self, object_to_be_removed):
+        Map.remove_object(object_to_be_removed)
+        object_to_be_removed.query.delete()
+
+    def get_object_at_location(self, x_pos, y_pos):
+        """
+        Before an object moves, it should request to see what exists in the new location.
+        """
+        object_map_at_target_location = self.maps.get((x_pos, y_pos))
+        if not object_map_at_target_location:
+            return None
+        return object_map_at_target_location.get_real_object()
 
     def generate_food(self):
         x_pos = random.randint(0, self.width)
         y_pos = random.randint(0, self.height)
         new_food = Food(self.id, x_pos, y_pos)
-        new_food.save()
         self.add_object(new_food)
-
-    def get_object_at_location(self, x_pos, y_pos):
-        for food in self.foods:
-            if food.x_pos == x_pos and food.y_pos == y_pos:
-                return food
-        for colony in self.colonies:
-            for ant in colony.ants:
-                if ant.x_pos == x_pos and ant.y_pos == y_pos:
-                    return ant
-        return None
-
-    def move(self, _object, x_pos, y_pos):
-        object_moved_into = self.get_object_at_location(x_pos, y_pos)

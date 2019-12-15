@@ -55,19 +55,26 @@ class Ant(GameState):
                 possible_x_coordinates.append(self.x_pos + i)
             if 0 <= self.y_pos + i <= self.world.height:
                 possible_y_coordinates.append(self.y_pos + i)
-        self.x_pos = random.choice(possible_x_coordinates)
-        self.y_pos = random.choice(possible_y_coordinates)
+        new_x_pos = random.choice(possible_x_coordinates)
+        new_y_pos = random.choice(possible_y_coordinates)
 
-        self.world.move(self, self.x_pos, self.y_pos)
+        object_at_location = self.world.move(old_x=self.x_pos,
+                                             old_y=self.y_pos,
+                                             new_x=new_x_pos,
+                                             new_y=new_y_pos)
 
-        # object_encountered = self.world.get_object_at_location(self.x_pos, self.y_pos)
-        # if object_encountered.__class__.__name__ == 'Food':
-        #     # Would prefer to do below, but don't want to import Food objects. Maybe move to template class
-        #     # if isinstance(object_encountered, Food):
-        #     self.colony.food_reserves += 1
-        #     object_encountered.destroy_self()
+        if hasattr(object_at_location, 'eatable') and object_at_location.eatable:
+            ant.eat(object_at_location)
+            object_at_location.consumed()
+        elif hasattr(object_at_location, 'attackable') and object_at_location.attackable:
+            ant.attack(object_at_location)
+            object_at_location.attack(ant)
 
-        return True
+    def eat(self, food):
+        self.colony.food_reserves += 1
+
+    def attack(self, ant):
+        self.query.delete()
 
     def find_food(self):
         self.move()

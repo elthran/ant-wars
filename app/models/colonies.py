@@ -46,7 +46,6 @@ class Colony(GameState):
             'basic': Ant(colony_id=self.id, x_pos=x_pos, y_pos=y_pos),
             }
         new_ant = ant_role_mapper[role]
-        new_ant.save()
         self.world.add_object(new_ant)
 
     def kill_ant(self, ant):

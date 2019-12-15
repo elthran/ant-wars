@@ -14,3 +14,6 @@ class Food(GameState):
         self.y_pos = y_pos
         self.value = value
 
+    def consumed(self):
+        self.world.remove_object(self)
+
