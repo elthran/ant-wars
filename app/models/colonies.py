@@ -37,13 +37,13 @@ class Colony(GameState):
         for ant in self.ants:
             ant.perform_action()
 
-    def birth_ant(self, x_pos=0, y_pos=0, role='basic'):
-        x_pos, y_pos = random.randint(0,20),random.randint(0,20)
+    def birth_ant(self, x=0, y=0, role='basic'):
+        x, y = random.randint(0,20),random.randint(0,20)
         if len(self.nests) > 0:
             first_nest = self.nests[0]
-            x_pos, y_pos = first_nest.entrance_x_pos, first_nest.entrance_y_pos
+            x, y = first_nest.entrance_x, first_nest.entrance_y
         ant_role_mapper = {
-            'basic': Ant(colony_id=self.id, x_pos=x_pos, y_pos=y_pos),
+            'basic': Ant(colony_id=self.id, x=x, y=y),
             }
         new_ant = ant_role_mapper[role]
         self.world.add_object(new_ant)

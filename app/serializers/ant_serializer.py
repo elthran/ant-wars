@@ -6,7 +6,7 @@ class AntSerializer:
     def render(cls, ant):
         return dict(
             id=ant.id,
-            pos=[ant.x_pos, ant.y_pos],
+            pos=[ant.x, ant.y],
             size=ant.size,
             carrying=ant.carrying,
             caste=ant.caste,

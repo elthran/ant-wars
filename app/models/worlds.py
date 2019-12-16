@@ -17,8 +17,8 @@ class World(GameState):
     width = db.Column(db.Integer)
     height = db.Column(db.Integer)
     maps = db.relationship('Map',
-                           collection_class=mapped_collection(lambda _map: (_map.x_pos,
-                                                                            _map.y_pos)),
+                           collection_class=mapped_collection(lambda _map: (_map.x,
+                                                                            _map.y)),
                            backref='world')
 
     def __init__(self):
@@ -26,32 +26,40 @@ class World(GameState):
         self.width = 50
         self.height = 50
 
-    def move(self, old_x, old_y, new_x, new_y):
-        object_at_location = Map.get_object_at_location(new_x, new_y)
+    def move(self, old_x, old_y, x, y):
+        object_at_location = Map.get_object_at_location(x, y)
         if object_at_location:
             return object_at_location
 
     def add_object(self, object_to_be_added):
         new_mapping = Map.add_object(self.id, object_to_be_added)
+        print("NEW MAPPING:", new_mapping)
         if new_mapping:
             object_to_be_added.save()
             new_mapping.ref_id = object_to_be_added.id
+            return True
+        else:
+            return False
 
     def remove_object(self, object_to_be_removed):
         Map.remove_object(object_to_be_removed)
         object_to_be_removed.query.delete()
 
-    def get_object_at_location(self, x_pos, y_pos):
+    def get_object_at_location(self, x, y):
         """
         Before an object moves, it should request to see what exists in the new location.
         """
-        object_map_at_target_location = self.maps.get((x_pos, y_pos))
+        object_map_at_target_location = self.maps.get((x, y))
         if not object_map_at_target_location:
             return None
         return object_map_at_target_location.get_real_object()
 
     def generate_food(self):
-        x_pos = random.randint(0, self.width)
-        y_pos = random.randint(0, self.height)
-        new_food = Food(self.id, x_pos, y_pos)
-        self.add_object(new_food)
+        x = random.randint(0, self.width)
+        y = random.randint(0, self.height)
+        new_food = Food(self.id, x, y)
+        food_created = self.add_object(new_food)
+        if not food_created:
+            existing_object = self.get_object_at_location(x, y)
+            if isinstance(existing_object, Food):
+                existing_object.value += 1

@@ -20,20 +20,11 @@ app = initialize(__name__, models=[World, Map, Ant, Colony, Nest, User])
 
 @app.route('/')
 def root():
-    return send_from_directory('dist', 'index.html')
-
-
-@app.route('/grow')
-def grow():
     world = World.query.first()
     colonies = Colony.query.all()
 
-    for colony in colonies:
-        colony.food_reserves += 1
-        colony.birth_ant()
-
     world.age += 1
-    if random.randint(1, 10) < 10:
+    if random.randint(1, 10) < 11:
         world.generate_food()
 
     for colony in colonies:
@@ -43,11 +34,6 @@ def grow():
         age=world.age,
         world=WorldSerializer.render(world)
     )
-
-
-app.add_url_rule('/colony/<int:_id>', view_func=ColonyController.as_view('colony_controller'))
-
-app.add_url_rule('/colony/<int:_id>', view_func=AntController.as_view('ant_controller'))
 
 
 @app.route('/change_colony_goal/<string:new_goal>')
@@ -72,3 +58,13 @@ def dig_nest():
         age=world.age,
         world=WorldSerializer.render(world)
     )
+
+
+@app.route('/old_stuff')
+def old_stuff():
+    return send_from_directory('dist', 'index.html')
+
+
+app.add_url_rule('/colony/<int:_id>', view_func=ColonyController.as_view('colony_controller'))
+
+app.add_url_rule('/colony/<int:_id>', view_func=AntController.as_view('ant_controller'))

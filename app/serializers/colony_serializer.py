@@ -9,7 +9,7 @@ class ColonySerializer:
     def render(cls, colony):
         nest_entrance = None
         for nest in colony.nests:
-            nest_entrance = nest.entrance_x_pos, nest.entrance_y_pos
+            nest_entrance = nest.entrance_x, nest.entrance_y
         return dict(
             id=colony.id,
             goal=colony.goal,
