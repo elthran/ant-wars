@@ -1,5 +1,5 @@
 from .templates import db, GameState
-from .ants import Ant
+from .ants import Ant, QueenAnt
 import random
 
 
@@ -18,6 +18,13 @@ class Colony(GameState):
         self.species = 'black'
         self.goal = 'scout'
         self.food_reserves = 1
+
+    @property
+    def has_queen(self):
+        for ant in self.ants:
+            if ant.caste == 'queen':
+                return True
+        return False
 
     def update_goal(self, new_goal):
         if new_goal in ('scout', 'feed', 'pass'):
@@ -45,7 +52,7 @@ class Colony(GameState):
         ant_role_mapper = {
             'basic': Ant(colony_id=self.id, x=x, y=y),
             }
-        new_ant = ant_role_mapper[role]
+        new_ant = ant_role_mapper[role] if self.has_queen else QueenAnt(colony_id=self.id, x=x, y=y)
         self.world.add_object(new_ant)
 
     def kill_ant(self, ant):

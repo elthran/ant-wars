@@ -2,7 +2,7 @@ import sqlalchemy.orm.exc
 import sqlalchemy.exc
 
 from .templates import db, GameState, Template
-from .ants import Ant
+from .ants import Ant, QueenAnt
 from .foods import Food
 
 

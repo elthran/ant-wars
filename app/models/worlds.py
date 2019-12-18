@@ -33,7 +33,6 @@ class World(GameState):
 
     def add_object(self, object_to_be_added):
         new_mapping = Map.add_object(self.id, object_to_be_added)
-        print("NEW MAPPING:", new_mapping)
         if new_mapping:
             object_to_be_added.save()
             new_mapping.ref_id = object_to_be_added.id

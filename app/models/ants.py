@@ -18,10 +18,15 @@ class Ant(GameState):
         self.colony_id = colony_id
         self.x = x
         self.y = y
-        self.size = 5
+        self.size = 1
         self.caste = 'worker'
         self.carrying = False
         self.task = 'pass'
+
+    def is_friendly(self, other_object):
+        if self.colony_id == other_object.colony_id:
+            return True
+        return False
 
     def get_new_task(self):
         new_tasks = ['scout', 'feed', 'pass']
@@ -63,12 +68,14 @@ class Ant(GameState):
                                              x=x,
                                              y=y)
 
-        if hasattr(object_at_location, 'consumable') and object_at_location.eatable:
+        if hasattr(object_at_location, 'consumable') and object_at_location.consumable:
             self.eat(object_at_location)
             object_at_location.consumed()
+            self.x, self.y = x, y
         elif hasattr(object_at_location, 'attackable') and object_at_location.attackable:
-            self.attack(object_at_location)
-            object_at_location.attack(self)
+            if not self.is_friendly(object_at_location):
+                self.attack(object_at_location)
+                object_at_location.attack(self)
 
     def eat(self, food):
         self.colony.food_reserves += 1
@@ -78,3 +85,30 @@ class Ant(GameState):
 
     def find_food(self):
         self.move()
+
+
+class QueenAnt(Ant):
+    def __init__(self, colony_id, x, y):
+        super().__init__(colony_id, x, y)
+        self.size = 5
+        self.caste = 'queen'
+        self.task = 'pass'
+
+    def get_new_task(self):
+        new_tasks = ['pass']
+        weights = []
+        for item in new_tasks:
+            if item == self.colony.goal:
+                weights.append(10)
+            else:
+                weights.append(1)
+        self.task = random.choices(new_tasks, weights=weights)[0]
+
+    def perform_action(self):
+        """
+        Perform an action and then get your newly assigned task.
+        """
+        ant_action_mapper = {'pass': self.sit_idle}
+        action_completed = ant_action_mapper[self.task]()
+        if action_completed:
+            self.get_new_task()
