@@ -10,28 +10,40 @@ import pdb
 
 
 class World(GameState):
+    """The world object which controls the game states for a player."""
+
     colonies = db.relationship('Colony', backref='world')
+    """All colonies ('players') which exist in this world."""
+
     ants = db.relationship('Ant', backref='world')
+    """All ants that exist in this world."""
+
     foods = db.relationship('Food', backref='world')
+    """All foods which exist in this world."""
+
     age = db.Column(db.Integer)
+    """How long this world has been running for."""
+
     width = db.Column(db.Integer)
+    """The horizontal size of the world."""
+
     height = db.Column(db.Integer)
-    maps = db.relationship('Map',
-                           collection_class=mapped_collection(lambda _map: (_map.x,
-                                                                            _map.y)),
-                           backref='world')
+    """The vertical size of the world."""
 
-    def __init__(self):
+    maps = db.relationship('Map', collection_class=mapped_collection(lambda _map: (_map.x,  _map.y)), backref='world')
+    """The mapping of objects in the world to their coordinates."""
+
+    def __init__(self, width=50, height=50):
         self.age = 0
-        self.width = 50
-        self.height = 50
-
-    def move(self, old_x, old_y, x, y):
-        object_at_location = Map.get_object_at_location(x, y)
-        if object_at_location:
-            return object_at_location
+        self.width = width
+        self.height = height
 
     def add_object(self, object_to_be_added):
+        """Adds the object to this world.
+
+        Args:
+            object_to_be_added (Object): The object to be added to the world.
+        """
         new_mapping = Map.add_object(self.id, object_to_be_added)
         if new_mapping:
             object_to_be_added.save()
@@ -41,12 +53,23 @@ class World(GameState):
             return False
 
     def remove_object(self, object_to_be_removed):
+        """Removes the object from this world.
+
+        Args:
+            object_to_be_removed (Object): The object to be removed.
+        """
         Map.remove_object(object_to_be_removed)
         object_to_be_removed.query.delete()
 
     def get_object_at_location(self, x, y):
-        """
-        Before an object moves, it should request to see what exists in the new location.
+        """Returns the object located at given coordinates.
+
+        Args:
+            x (int): X coordinate
+            y (int): Y coordinates
+
+        Returns:
+            Object: The object located at those coordinates. None if nothing exists there.
         """
         object_map_at_target_location = self.maps.get((x, y))
         if not object_map_at_target_location:
@@ -54,6 +77,7 @@ class World(GameState):
         return object_map_at_target_location.get_real_object()
 
     def generate_food(self):
+        """Creates a food object randomly somewhere in this world."""
         x = random.randint(0, self.width)
         y = random.randint(0, self.height)
         new_food = Food(self.id, x, y)

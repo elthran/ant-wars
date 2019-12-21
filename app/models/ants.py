@@ -5,13 +5,28 @@ from .templates import db, GameState
 
 class Ant(GameState):
     colony_id = db.Column(db.Integer, db.ForeignKey('colony.id'), nullable=False)
+    """Which colony the ant belongs to."""
+
     world_id = db.Column(db.Integer, db.ForeignKey('world.id'), nullable=False)
+    """Which world the ant belongs to."""
+
     x = db.Column(db.Integer)
+    """The x-coordinate location it's currently at."""
+
     y = db.Column(db.Integer)
+    """The y-coordinate location it's currently at."""
+
     size = db.Column(db.Integer)
+    """How much space the ant takes up when rendered."""
+
     caste = db.Column(db.String(20))
+    """What type of ant it is."""
+
     carrying = db.Column(db.Boolean)
+    """Whether or not the ant is carrying an object."""
+
     task = db.Column(db.String(20))
+    """The current task the ant wants to perform."""
 
     def __init__(self, colony_id, x, y):
         self.world_id = 1
@@ -24,11 +39,20 @@ class Ant(GameState):
         self.task = 'pass'
 
     def is_friendly(self, other_object):
+        """Whether or not the ant is friendly towards another object.
+
+        Args:
+            other_object (Object): The other object which is interacting with this ant.
+
+        Returns:
+            Boolean: True if it is friendly. Otherwise False.
+        """
         if self.colony_id == other_object.colony_id:
             return True
         return False
 
     def get_new_task(self):
+        """Assigns this ant a new task to perform."""
         new_tasks = ['scout', 'feed', 'pass']
         weights = []
         for item in new_tasks:
@@ -39,9 +63,7 @@ class Ant(GameState):
         self.task = random.choices(new_tasks, weights=weights)[0]
 
     def perform_action(self):
-        """
-        Perform an action and then get your newly assigned task.
-        """
+        """Forces the ant to perform its currently assigned task. If complete, it gets a new assignment."""
         ant_action_mapper = {'pass': self.sit_idle,
                              'scout': self.move,
                              'feed': self.find_food}
@@ -50,9 +72,15 @@ class Ant(GameState):
             self.get_new_task()
 
     def sit_idle(self):
+        """Forces the ant to do nothing.
+
+        Returns:
+            Boolean: Always True.
+        """
         return True
 
     def move(self):
+        """Forces the ant to attempt to move to a randomly adjacent location."""
         possible_x_coordinates = []
         possible_y_coordinates = []
         for i in range(-1, 2):
@@ -63,10 +91,7 @@ class Ant(GameState):
         x = random.choice(possible_x_coordinates)
         y = random.choice(possible_y_coordinates)
 
-        object_at_location = self.world.move(old_x=self.x,
-                                             old_y=self.y,
-                                             x=x,
-                                             y=y)
+        object_at_location = self.world.get_object_at_location(x=x, y=y)
 
         if hasattr(object_at_location, 'consumable') and object_at_location.consumable:
             self.eat(object_at_location)
@@ -78,12 +103,23 @@ class Ant(GameState):
                 object_at_location.attack(self)
 
     def eat(self, food):
+        """ Forces the ant to eat food.
+
+        Args:
+            food (Food Object): The food to be eaten.
+        """
         self.colony.food_reserves += 1
 
     def attack(self, ant):
+        """Forces the ant to attack another ant.
+
+        Args:
+            ant (Ant Object): The other ant to be attacked.
+        """
         self.query.delete()
 
     def find_food(self):
+        """Forces the ant to look for food."""
         self.move()
 
 
@@ -95,6 +131,7 @@ class QueenAnt(Ant):
         self.task = 'pass'
 
     def get_new_task(self):
+        """Assigns this ant a new task to perform."""
         new_tasks = ['pass']
         weights = []
         for item in new_tasks:
@@ -105,9 +142,7 @@ class QueenAnt(Ant):
         self.task = random.choices(new_tasks, weights=weights)[0]
 
     def perform_action(self):
-        """
-        Perform an action and then get your newly assigned task.
-        """
+        """Forces the ant to perform its currently assigned task. If complete, it gets a new assignment."""
         ant_action_mapper = {'pass': self.sit_idle}
         action_completed = ant_action_mapper[self.task]()
         if action_completed:
