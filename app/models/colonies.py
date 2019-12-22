@@ -1,5 +1,5 @@
 from .templates import db, GameState
-from .ants import Ant, QueenAnt
+from .ants import Ant, QueenAnt, SoldierAnt
 import random
 
 
@@ -32,7 +32,7 @@ class Colony(GameState):
         self.user_id = user_id
         self.species = 'black'
         self.goal = 'scout'
-        self.food_reserves = 1
+        self.food_reserves = 10
 
     @property
     def has_queen(self):
@@ -85,6 +85,7 @@ class Colony(GameState):
             x, y = first_nest.entrance_x, first_nest.entrance_y
         ant_role_mapper = {
             'basic': Ant(colony_id=self.id, x=x, y=y),
+            'soldier': SoldierAnt(colony_id=self.id, x=x, y=y),
             }
         new_ant = ant_role_mapper[role] if self.has_queen else QueenAnt(colony_id=self.id, x=x, y=y)
         self.world.add_object(new_ant)

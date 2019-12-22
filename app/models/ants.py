@@ -28,6 +28,11 @@ class Ant(GameState):
     task = db.Column(db.String(20))
     """The current task the ant wants to perform."""
 
+    __mapper_args__ = {'polymorphic_on': caste,
+                       'polymorphic_identity': 'worker'}
+    """Set the base class and the default identity of this class. Used for child classes
+    that will inherit but live in the same database table."""
+
     def __init__(self, colony_id, x, y):
         self.world_id = 1
         self.colony_id = colony_id
@@ -129,6 +134,8 @@ class Ant(GameState):
 
 
 class QueenAnt(Ant):
+    __mapper_args__ = {'polymorphic_identity': 'queen'}
+
     def __init__(self, colony_id, x, y):
         super().__init__(colony_id, x, y)
         self.size = 5
@@ -152,3 +159,13 @@ class QueenAnt(Ant):
         action_completed = ant_action_mapper[self.task]()
         if action_completed:
             self.get_new_task()
+
+
+class SoldierAnt(Ant):
+    __mapper_args__ = {'polymorphic_identity': 'soldier'}
+
+    def __init__(self, colony_id, x, y):
+        super().__init__(colony_id, x, y)
+        self.size = 5
+        self.caste = 'soldier'
+        self.task = 'scout'

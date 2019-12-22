@@ -1,3 +1,5 @@
+from textwrap import dedent
+
 import sqlalchemy.orm.exc
 import sqlalchemy.exc
 
@@ -32,7 +34,14 @@ class Map(Template):
         Returns:
             Object: The object mapped to the coordinates.
         """
-        return eval(f'{self.ref_class}.query.get({self.ref_id})')
+        query_string = dedent(f"""\
+            import app.config.models_importer as models_importer
+
+            class_ = models_importer.all_models['{self.ref_class}']
+        
+            class_.query.get({self.ref_id})""")
+
+        return exec(query_string)
 
     @classmethod
     def get_object_at_location(cls, x, y):
@@ -70,6 +79,7 @@ class Map(Template):
             new_mapping.save()
             return new_mapping
         except (sqlalchemy.orm.exc.FlushError, sqlalchemy.exc.IntegrityError) as e:
+            db.session.rollback()
             return None
 
     @classmethod

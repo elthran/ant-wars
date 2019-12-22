@@ -29,7 +29,7 @@ def root():
     colonies = Colony.query.all()
 
     world.age += 1
-    if random.randint(1, 10) < 11:
+    if random.randint(1, 10) < 8:
         world.generate_food()
 
     for colony in colonies:
