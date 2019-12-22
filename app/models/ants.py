@@ -80,7 +80,11 @@ class Ant(GameState):
         return True
 
     def move(self):
-        """Forces the ant to attempt to move to a randomly adjacent location."""
+        """Forces the ant to attempt to move to a randomly adjacent location.
+
+        Returns:
+            Boolean: Always returns True. ie. tells the Ant to get a new task.
+            """
         possible_x_coordinates = []
         possible_y_coordinates = []
         for i in range(-1, 2):
@@ -101,6 +105,7 @@ class Ant(GameState):
             if not self.is_friendly(object_at_location):
                 self.attack(object_at_location)
                 object_at_location.attack(self)
+        return True
 
     def eat(self, food):
         """ Forces the ant to eat food.

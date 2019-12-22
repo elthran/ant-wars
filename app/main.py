@@ -31,8 +31,6 @@ def root():
     world.age += 1
     if random.randint(1, 10) < 11:
         world.generate_food()
-        for food in world.foods:
-            print(food)
 
     for colony in colonies:
         colony.advance_time()
