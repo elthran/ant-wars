@@ -7,14 +7,11 @@ class ColonySerializer:
 
     @classmethod
     def render(cls, colony):
-        nest_entrance = None
-        for nest in colony.nests:
-            nest_entrance = nest.entrance_x, nest.entrance_y
         return dict(
             id=colony.id,
             goal=colony.goal,
             username=colony.user.username,
             ants=[AntSerializer.render(ant) for ant in colony.ants],
-            nest_entrance=nest_entrance,
+            nest_entrance=[(nest.entrance_x, nest.entrance_y) for nest in colony.nests],
             food_reserves=colony.food_reserves
         )

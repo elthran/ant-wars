@@ -19,7 +19,7 @@ class Map(Template):
     ref_class = db.Column(db.String(30))
     """The Object type that lives at these coordinates."""
 
-    ref_id = db.Column(db.Integer())
+    ref_id = db.Column(db.Integer)
     """The Object id that lives at these coordinates."""
 
     def __init__(self, world_id, x, y, ref_class):

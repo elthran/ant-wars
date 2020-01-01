@@ -10,6 +10,7 @@ class WorldSerializer:
     def render(cls, world):
         return dict(
             id=world.id,
+            age=world.age,
             colonies=[ColonySerializer.render(colony) for colony in world.colonies],
             foods=[FoodSerializer.render(food) for food in world.foods]
         )

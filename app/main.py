@@ -73,7 +73,6 @@ def dig_nest():
         nest = Nest(colony.id, world.height // 2, world.width // 2)
         nest.save()
     return jsonify(
-        age=world.age,
         world=WorldSerializer.render(world)
     )
 

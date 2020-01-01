@@ -9,14 +9,14 @@ import pdb
 
 class AntController(MethodView):
 
-    def get(self, _id):
-        ant = Ant.query.get(_id)
+    def get(self, id_):
+        ant = Ant.query.get(id_)
         return jsonify(
             ant=AntSerializer.render(ant)
         )
 
-    def put(self, _id):
-        ant = Ant.query.get(_id)
+    def put(self, id_):
+        ant = Ant.query.get(id_)
         # pdb.set_trace()
         attributes = request.json
         updated_ant = ant.update(attributes)

@@ -24,7 +24,7 @@ class Colony(GameState):
     goal = db.Column(db.String(20))
     """The current object of the colony which directs how the ants will behave."""
 
-    food_reserves = db.Column(db.Integer())
+    food_reserves = db.Column(db.Integer)
     """The amount of food the colony has saved up."""
 
     def __init__(self, world_id, user_id):
@@ -32,7 +32,7 @@ class Colony(GameState):
         self.user_id = user_id
         self.species = 'black'
         self.goal = 'scout'
-        self.food_reserves = 10
+        self.food_reserves = 2
 
     @property
     def has_queen(self):

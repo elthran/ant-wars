@@ -1,9 +1,11 @@
+import math
 import random
 
 from sqlalchemy.orm.collections import mapped_collection
 
 from .maps import Map
 from .foods import Food
+from .pheromones import Pheromone
 from .templates import db, GameState
 
 import pdb
@@ -32,6 +34,13 @@ class World(GameState):
 
     maps = db.relationship('Map', collection_class=mapped_collection(lambda _map: (_map.x,  _map.y)), backref='world')
     """The mapping of objects in the world to their coordinates."""
+
+    pheromones = db.relationship('Pheromone',
+                                 collection_class=mapped_collection(lambda _pheromone: (_pheromone.colony_id,
+                                                                                        _pheromone.x,
+                                                                                        _pheromone.y)),
+                                 backref='world')
+    """The mapping of pheromones in the world to their coordinates."""
 
     def __init__(self, width=50, height=50):
         self.age = 0
@@ -86,3 +95,11 @@ class World(GameState):
             existing_object = self.get_object_at_location(x, y)
             if isinstance(existing_object, Food):
                 existing_object.value += 1
+
+    def add_pheromone_trail(self, colony_id, old_x, old_y, x, y):
+        existing_trail = self.pheromones.get((colony_id, x, y))
+        if not existing_trail:
+            degrees = (math.degrees(math.atan2(old_y - y, old_x - x))) % 360
+            new_trail = Pheromone.add_pheromone(self.id, 1, x, y, 'food-path', degrees, 1)
+        elif existing_trail.colony_id == 1:
+            existing_trail.strength += 1

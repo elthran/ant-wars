@@ -30,10 +30,10 @@ def initialize(name, models=None):
         player_colony_1 = Colony(game_world.id, player.id)
         player_colony_1.save()
 
-        ai = User("computer_easy")
-        ai.save()
-        ai_colony_1 = Colony(game_world.id, ai.id)
-        ai_colony_1.save()
+        # ai = User("computer_easy")
+        # ai.save()
+        # ai_colony_1 = Colony(game_world.id, ai.id)
+        # ai_colony_1.save()
 
         db.session.commit()
 

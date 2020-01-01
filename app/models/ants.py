@@ -22,16 +22,19 @@ class Ant(GameState):
     caste = db.Column(db.String(20))
     """What type of ant it is."""
 
+    __mapper_args__ = {'polymorphic_on': caste,
+                       'polymorphic_identity': 'worker'}
+    """Set the base class and the default identity of this class. Used for child classes
+    that will inherit but live in the same database table."""
+
     carrying = db.Column(db.Boolean)
     """Whether or not the ant is carrying an object."""
 
     task = db.Column(db.String(20))
     """The current task the ant wants to perform."""
 
-    __mapper_args__ = {'polymorphic_on': caste,
-                       'polymorphic_identity': 'worker'}
-    """Set the base class and the default identity of this class. Used for child classes
-    that will inherit but live in the same database table."""
+    is_releasing_pheromone = db.Column(db.Boolean)
+    """Whether or not the ant is currently releasing a trail."""
 
     def __init__(self, colony_id, x, y):
         self.world_id = 1
@@ -70,7 +73,7 @@ class Ant(GameState):
     def perform_action(self):
         """Forces the ant to perform its currently assigned task. If complete, it gets a new assignment."""
         ant_action_mapper = {'pass': self.sit_idle,
-                             'scout': self.move,
+                             'scout': self.find_food,
                              'feed': self.find_food}
         action_completed = ant_action_mapper[self.task]()
         if action_completed:
@@ -84,12 +87,38 @@ class Ant(GameState):
         """
         return True
 
-    def move(self):
-        """Forces the ant to attempt to move to a randomly adjacent location.
+    def move(self, x, y):
+        """Forces the ant to attempt to move to a new location.
+
+        Args:
+            x (int): The x-coordinates of the new target.
+            y (int): The y-coordinates of the new target.
 
         Returns:
             Boolean: Always returns True. ie. tells the Ant to get a new task.
             """
+        # assert (self.x != x and self.y != y), "Ant trying to move nowhere"
+        if (self.x == x and self.y == y):
+            return False
+        object_at_location = self.world.get_object_at_location(x=x, y=y)
+
+        if hasattr(object_at_location, 'consumable') and object_at_location.consumable:
+            """If it's a piece of food, move onto it."""
+            self.eat(object_at_location)
+            object_at_location.consumed()
+            self.x, self.y = x, y
+        elif hasattr(object_at_location, 'attackable') and object_at_location.attackable:
+            """If it's an enemy ant, kill it."""
+            if not self.is_friendly(object_at_location):
+                self.attack(object_at_location)
+                object_at_location.attack(self)
+        elif object_at_location is None:
+            """If it's an empty space, simply move there."""
+            self.world.add_pheromone_trail(self.colony_id, self.x, self.y, x, y)
+            self.x, self.y = x, y
+        return True
+
+    def temp_get_random_move_location(self):
         possible_x_coordinates = []
         possible_y_coordinates = []
         for i in range(-1, 2):
@@ -99,18 +128,7 @@ class Ant(GameState):
                 possible_y_coordinates.append(self.y + i)
         x = random.choice(possible_x_coordinates)
         y = random.choice(possible_y_coordinates)
-
-        object_at_location = self.world.get_object_at_location(x=x, y=y)
-
-        if hasattr(object_at_location, 'consumable') and object_at_location.consumable:
-            self.eat(object_at_location)
-            object_at_location.consumed()
-            self.x, self.y = x, y
-        elif hasattr(object_at_location, 'attackable') and object_at_location.attackable:
-            if not self.is_friendly(object_at_location):
-                self.attack(object_at_location)
-                object_at_location.attack(self)
-        return True
+        return x,y
 
     def eat(self, food):
         """ Forces the ant to eat food.
@@ -130,7 +148,8 @@ class Ant(GameState):
 
     def find_food(self):
         """Forces the ant to look for food."""
-        self.move()
+        x,y = self.temp_get_random_move_location()
+        self.move(x, y)
 
 
 class QueenAnt(Ant):
