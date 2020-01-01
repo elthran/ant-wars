@@ -1,4 +1,21 @@
 <template lang="pug">
+  div
+    h1 Hello World
+</template>
+
+<script>
+export default {
+  name: 'Leaves',
+  components: {
+  },
+  props: {
+
+  },
+  data () {
+    return {}
+  },
+  computed: {},
+  methods: {},
   v-layer
     v-group(
       v-for="leaf in leaves"

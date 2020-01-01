@@ -24,13 +24,19 @@ def initialize(name, models=None):
 
         game_world = World()
         game_world.save()
-        player1 = Colony(game_world.id)
-        player1.save()
-        player1_nest = Nest(player1.id, 25, 25)
-        player1_nest.save()
-        player1_ant = Ant(player1.id, player1_nest.id, 20, 20)
-        player1_ant.save()
+
+        player = User("elthran")
+        player.save()
+        player_colony_1 = Colony(game_world.id, player.id)
+        player_colony_1.save()
+
+        # ai = User("computer_easy")
+        # ai.save()
+        # ai_colony_1 = Colony(game_world.id, ai.id)
+        # ai_colony_1.save()
+
         db.session.commit()
+
     return app
 
 

@@ -48,6 +48,9 @@ class GameState(Template):
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
     time_modified = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+    def destroy_self(self):
+        self.delete()
+
 
 class GameEvent(Template):
     __abstract__ = True
