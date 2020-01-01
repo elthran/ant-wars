@@ -9,7 +9,9 @@
     ants(
       :ants="ants"
     )
-    leaves
+    leaves(
+      :leaves="leaves"
+    )
 </template>
 
 <script>
@@ -29,7 +31,8 @@ export default {
   data () {
     return {
       gridSpacing: 25,
-      ants: this.randomAnts()
+      ants: this.randomAnts(),
+      leaves: this.randomLeaves(),
     }
   },
   computed: {
@@ -74,6 +77,21 @@ export default {
       } while (numOfAnts > 0)
 
       return ants
+    },
+    randomLeaves() {
+      let leaves = []
+      let numOfLeaves = this.randomBetween(2, 20)
+
+      do {
+        leaves.push({
+          id: numOfLeaves,
+          x: this.randomXCoord(),
+          y: this.randomYCoord(),
+        })
+        numOfLeaves--
+      } while (numOfLeaves > 0)
+
+      return leaves
     },
     randomXCoord() {
       return this.randomBetween(1, this.xGridUnits) * 25

@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# Install all necessary things to develop this app.
+# This script uses sudo only where absolutely necessary.
+set -e
+
+install_apt_modules() {
+    echo "Installing requisite apt modules ..."
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    if package_exists cmdtest ;then
+        echo "Removing cmdtest package that conflicts with yarn."
+        sudo apt remove cmdtest
+    fi
+    sudo apt update
+    sudo apt install yarn -y
+    sudo -k
+}
+
+
+install () {
+    SCRIPT_DIR=$(dirname $0)
+
+    source ${SCRIPT_DIR}/bash_helpers.sh
+    move_to_base $SCRIPT_DIR
+
+    install_apt_modules
+}
+
+install

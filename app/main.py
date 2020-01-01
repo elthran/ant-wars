@@ -1,6 +1,6 @@
 import random
 
-from flask import send_from_directory, jsonify
+from flask import render_template, send_from_directory, jsonify
 
 from .config.initialize import initialize
 
@@ -25,6 +25,11 @@ def root():
     Returns:
         JSONIFY: A serialized view of the world state.
     """
+    return send_from_directory('dist', 'index.html')
+
+
+@app.route('/grow')
+def grow():
     world = World.query.first()
     colonies = Colony.query.all()
 
@@ -90,3 +95,7 @@ def old_stuff():
 app.add_url_rule('/colony/<int:_id>', view_func=ColonyController.as_view('colony_controller'))
 
 app.add_url_rule('/colony/<int:_id>', view_func=AntController.as_view('ant_controller'))
+    return jsonify(
+        age=world.age,
+        colony=colony,  # build serializer
+    )
