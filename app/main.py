@@ -41,7 +41,6 @@ def grow():
         colony.advance_time()
 
     return jsonify(
-        age=world.age,
         world=WorldSerializer.render(world)
     )
 
@@ -60,7 +59,6 @@ def change_colony_goal(new_goal):
     colony = Colony.query.first()  # current_user.colony
     colony.update_goal(new_goal)
     return jsonify(
-        age=world.age,
         world=WorldSerializer.render(world)
     )
 
@@ -82,20 +80,6 @@ def dig_nest():
     )
 
 
-@app.route('/old_stuff')
-def old_stuff():
-    """Marlen's old code which rendered a displayed a nice view of the game.
-
-    Returns:
-        Unknown Type: A beautifully rendered view of the world state.
-    """
-    return send_from_directory('dist', 'index.html')
-
-
 app.add_url_rule('/colony/<int:_id>', view_func=ColonyController.as_view('colony_controller'))
 
 app.add_url_rule('/colony/<int:_id>', view_func=AntController.as_view('ant_controller'))
-    return jsonify(
-        age=world.age,
-        colony=colony,  # build serializer
-    )
