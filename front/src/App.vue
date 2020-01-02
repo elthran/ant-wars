@@ -5,6 +5,7 @@
 
 <script>
 import World from '@/components/World'
+import growApi from '@/api/grow-api'
 
 export default {
   name: 'App',
@@ -15,6 +16,9 @@ export default {
     return {
     }
   },
+  mounted () {
+    growApi.grow()
+  }
 }
 </script>
 

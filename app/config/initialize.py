@@ -11,7 +11,7 @@ from . import hooks
 
 
 def initialize(name, models=None):
-    app = Flask(name.split('.')[0], static_url_path='', static_folder='dist')
+    app = Flask(name.split('.')[0], static_url_path='/', static_folder='dist')
 
     load_configs(app)
     load_extensions(app)
