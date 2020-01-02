@@ -56,6 +56,9 @@ export default {
     growApi.grow()
       .then((world) => {
         console.log('world', world)
+        console.log('world.colonies[0]', world.colonies[0])
+        console.log('world.colonies[0].ants', world.colonies[0].ants)
+        console.log('world.foods', world.foods)
         this.ants = world.colonies[0].ants
         this.leaves = world.foods
 
