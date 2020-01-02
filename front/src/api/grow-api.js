@@ -9,14 +9,9 @@ export default {
   update () {},
   delete () {},
   grow () {
-    console.log('runing grow')
     return http.get('/grow')
       .then(response => {
-        console.log(response.data);
-        console.log(response.status);
-        console.log(response.statusText);
-        console.log(response.headers);
-        console.log(response.config);
+        return response.data.world
       })
       .catch(error => {
         console.log(error.toJSON())

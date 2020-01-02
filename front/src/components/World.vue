@@ -19,7 +19,6 @@ import Ants from './Ants'
 import Grid from './Grid'
 import Leaves from './Leaves'
 import growApi from '@/api/grow-api'
-import axios from 'axios'
 
 export default {
   name: 'World',
@@ -54,18 +53,6 @@ export default {
   mounted () {
     // layer.draw()
     // console.log('this.width', this.width)
-    axios.get('/grow')
-      .then(function (response) {
-        // handle success
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-      .finally(function () {
-        // always executed
-      });
     growApi.grow()
       .then((world) => {
         console.log('world', world)
