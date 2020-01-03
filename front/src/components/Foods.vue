@@ -1,22 +1,22 @@
 <template lang="pug">
   v-layer
     v-group(
-      v-for="leaf in leaves"
-      :key="leaf.id"
+      v-for="food in foods"
+      :key="food.id"
     )
-      k-image(:config="buildLeafConfig(leaf)")
+      k-image(:config="buildFoodConfig(food)")
 </template>
 
 <script>
 import KImage from './KImage'
 
 export default {
-  name: 'Leaves',
+  name: 'Foods',
   components: {
     KImage,
   },
   props: {
-    leaves: {
+    foods: {
       type: Array,
       default () {
         return []
@@ -25,23 +25,23 @@ export default {
   },
   data () {
     return {
-      leafBaseConfig: {
+      foodBaseConfig: {
         x: 0,
         y: 0,
-        type: 'leaf',
+        type: 'food',
         src: '/assets/images/leaf.jpg',
       },
     }
   },
   computed: {},
   methods: {
-    buildLeafConfig (leaf) {
+    buildFoodConfig (food) {
       return {
-        ...this.leafBaseConfig,
-        ...leaf,
-        src: `/assets/images/${leaf.type || 'leaf'}.jpg`,
+        ...this.foodBaseConfig,
+        ...food,
+        src: `/assets/images/${food.type || 'leaf'}.jpg`,
       }
-    }
+    },
   },
 }
 </script>

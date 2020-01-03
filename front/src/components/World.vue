@@ -10,15 +10,15 @@
       :ants="ants"
       :gridSpacing="gridSpacing"
     )
-    leaves(
-      :leaves="leaves"
+    foods(
+      :foods="foods"
     )
 </template>
 
 <script>
 import Ants from './Ants'
 import Grid from './Grid'
-import Leaves from './Leaves'
+import Foods from './Foods'
 import growApi from '@/api/grow-api'
 
 export default {
@@ -26,7 +26,7 @@ export default {
   components: {
     Grid,
     Ants,
-    Leaves,
+    Foods,
   },
   props: {
   },
@@ -36,7 +36,7 @@ export default {
       // ants: this.randomAnts(),
       // leaves: this.randomLeaves(),
       ants: [],
-      leaves: [],
+      foods: [],
     }
   },
   computed: {
@@ -63,7 +63,7 @@ export default {
         console.log('world.colonies[0].ants', world.colonies[0].ants)
         console.log('world.foods', world.foods)
         this.ants = world.colonies[0].ants
-        this.leaves = world.foods
+        this.foods = world.foods
 
       })
     // this.interval =  setInterval(() => {
