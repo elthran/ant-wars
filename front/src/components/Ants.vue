@@ -22,6 +22,12 @@ export default {
         return []
       },
     },
+    gridSpacing: {
+      type: Number,
+      default () {
+        return 25
+      }
+    }
   },
   data () {
     return {
@@ -38,11 +44,18 @@ export default {
   },
   methods: {
     buildAntConfig (ant) {
-      return {
+      const antConfig = {
         ...this.antBaseConfig,
         ...ant,
         src: `/assets/images/${ant.type || 'ant'}.jpg`,
       }
+      const antWithLocalCoords = this.mapToLocalCoordinateSystem(antConfig)
+      return antWithLocalCoords
+    },
+    mapToLocalCoordinateSystem (ant) {
+      ant.x *= this.gridSpacing
+      ant.y *= this.gridSpacing
+      return ant
     }
   },
 }

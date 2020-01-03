@@ -8,6 +8,7 @@
     )
     ants(
       :ants="ants"
+      :gridSpacing="gridSpacing"
     )
     leaves(
       :leaves="leaves"
@@ -51,6 +52,8 @@ export default {
     },
   },
   mounted () {
+    console.log('this.xGridUnits', this.xGridUnits)
+    console.log('this.yGridUnits', this.yGridUnits)
     // layer.draw()
     // console.log('this.width', this.width)
     growApi.grow()
