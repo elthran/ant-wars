@@ -13,7 +13,7 @@ import KImage from './KImage'
 export default {
   name: 'Ants',
   components: {
-    KImage
+    KImage,
   },
   props: {
     ants: {
@@ -26,8 +26,8 @@ export default {
       type: Number,
       default () {
         return 25
-      }
-    }
+      },
+    },
   },
   data () {
     return {
@@ -56,7 +56,7 @@ export default {
       ant.x *= this.gridSpacing
       ant.y *= this.gridSpacing
       return ant
-    }
+    },
   },
 }
 </script>
