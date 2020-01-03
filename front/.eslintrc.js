@@ -15,5 +15,7 @@ module.exports = {
     ecmaVersion: 2018,
   },
   plugins: ['vue', 'pug'],
-  rules: {},
+  rules: {
+    'comma-dangle': ['error', 'always-multiline'],
+  },
 }
