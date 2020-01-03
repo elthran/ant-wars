@@ -12,6 +12,7 @@
     )
     foods(
       :foods="foods"
+      :gridSpacing="gridSpacing"
     )
 </template>
 

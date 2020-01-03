@@ -22,6 +22,12 @@ export default {
         return []
       },
     },
+    gridSpacing: {
+      type: Number,
+      default () {
+        return 25
+      },
+    },
   },
   data () {
     return {
@@ -36,11 +42,18 @@ export default {
   computed: {},
   methods: {
     buildFoodConfig (food) {
-      return {
+      const foodConfig = {
         ...this.foodBaseConfig,
         ...food,
         src: `/assets/images/${food.type || 'leaf'}.jpg`,
       }
+      const foodWithLocalCoords = this.mapToLocalCoordinateSystem(foodConfig)
+      return foodWithLocalCoords
+    },
+    mapToLocalCoordinateSystem (food) {
+      food.x *= this.gridSpacing
+      food.y *= this.gridSpacing
+      return food
     },
   },
 }
