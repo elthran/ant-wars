@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy_utils import database_exists, create_database
+from sqlalchemy.exc import OperationalError as SqlalchemyOperationalError
 from flask import Flask
 
 from .extensions import flask_db as db
@@ -10,7 +11,7 @@ from . import hooks
 
 
 def initialize(name, models=None):
-    app = Flask(name.split('.')[0], static_url_path='', static_folder='dist')
+    app = Flask(name.split('.')[0], static_url_path='/', static_folder='dist')
 
     load_configs(app)
     load_extensions(app)
@@ -19,7 +20,11 @@ def initialize(name, models=None):
     load_models(models)
 
     with app.app_context():
-        db.drop_all()
+        try: # an empty database can't be drop (first run only)
+            db.drop_all()
+        except SqlalchemyOperationalError as ex:
+            print('Ignore if first run.')
+            print(ex)
         db.create_all()
 
         game_world = World()

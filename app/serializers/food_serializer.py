@@ -7,5 +7,6 @@ class FoodSerializer:
         return dict(
             id=food.id,
             value=food.value,
-            coordinates=(food.x, food.y)
+            x=food.x,
+            y=food.y,
         )

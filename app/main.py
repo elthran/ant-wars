@@ -11,12 +11,12 @@ from .models.nests import Nest
 from .models.users import User
 from .models.maps import Map
 
-from .api.colony_controller import ColonyController
-from .api.ant_controller import AntController
+from .blueprints.api_blueprint import api_blueprint
 from .serializers.world_serializer import WorldSerializer
 
 app = initialize(__name__, models=[World, Map, Ant, Colony, Nest, User])
 
+app.register_blueprint(api_blueprint)
 
 @app.route('/')
 def root():
@@ -78,8 +78,3 @@ def dig_nest():
     return jsonify(
         world=WorldSerializer.render(world)
     )
-
-
-app.add_url_rule('/colony/<int:_id>', view_func=ColonyController.as_view('colony_controller'))
-
-app.add_url_rule('/colony/<int:_id>', view_func=AntController.as_view('ant_controller'))

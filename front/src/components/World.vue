@@ -8,31 +8,36 @@
     )
     ants(
       :ants="ants"
+      :gridSpacing="gridSpacing"
     )
-    leaves(
-      :leaves="leaves"
+    foods(
+      :foods="foods"
+      :gridSpacing="gridSpacing"
     )
 </template>
 
 <script>
 import Ants from './Ants'
 import Grid from './Grid'
-import Leaves from './Leaves'
+import Foods from './Foods'
+import growApi from '@/api/grow-api'
 
 export default {
   name: 'World',
   components: {
     Grid,
     Ants,
-    Leaves,
+    Foods,
   },
   props: {
   },
   data () {
     return {
       gridSpacing: 25,
-      ants: this.randomAnts(),
-      leaves: this.randomLeaves(),
+      // ants: this.randomAnts(),
+      // leaves: this.randomLeaves(),
+      ants: [],
+      foods: [],
     }
   },
   computed: {
@@ -48,58 +53,28 @@ export default {
     },
   },
   mounted () {
+    console.log('this.xGridUnits', this.xGridUnits)
+    console.log('this.yGridUnits', this.yGridUnits)
     // layer.draw()
     // console.log('this.width', this.width)
+    growApi.grow()
+      .then((world) => {
+        console.log('world', world)
+        console.log('world.colonies[0]', world.colonies[0])
+        console.log('world.colonies[0].ants', world.colonies[0].ants)
+        console.log('world.foods', world.foods)
+        this.ants = world.colonies[0].ants
+        this.foods = world.foods
+
+      })
+    // this.interval =  setInterval(() => {
+    //   this.world = growApi.grow()
+    //   console.log('Growing!!!')
+    // }, 5000);
   },
-  methods: {
-    randomBetween(min = 3, max = 20) {
-      return Math.floor((Math.random() * (max-min)) + min) // 1-100
-    },
-    roundToMultiple(value, interval) {
-      const diffInterval = value % interval
-      if (diffInterval < interval / 2.0) {
-        return value - diffInterval
-      } else {
-        return value + (interval - diffInterval)
-      }
-    },
-    randomAnts() {
-      let ants = []
-      let numOfAnts = this.randomBetween(2, 20)
-
-      do {
-        ants.push({
-          id: numOfAnts,
-          x: this.randomXCoord(),
-          y: this.randomYCoord(),
-        })
-        numOfAnts--
-      } while (numOfAnts > 0)
-
-      return ants
-    },
-    randomLeaves() {
-      let leaves = []
-      let numOfLeaves = this.randomBetween(2, 20)
-
-      do {
-        leaves.push({
-          id: numOfLeaves,
-          x: this.randomXCoord(),
-          y: this.randomYCoord(),
-        })
-        numOfLeaves--
-      } while (numOfLeaves > 0)
-
-      return leaves
-    },
-    randomXCoord() {
-      return this.randomBetween(1, this.xGridUnits) * 25
-    },
-    randomYCoord() {
-      return this.randomBetween(1, this.yGridUnits) * 25
-    },
-  }
+  beforeDestroy () {
+    // clearInterval(this.interval);
+  },
 }
 </script>
 

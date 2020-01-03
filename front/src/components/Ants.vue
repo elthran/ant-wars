@@ -13,13 +13,19 @@ import KImage from './KImage'
 export default {
   name: 'Ants',
   components: {
-    KImage
+    KImage,
   },
   props: {
     ants: {
       type: Array,
       default () {
         return []
+      },
+    },
+    gridSpacing: {
+      type: Number,
+      default () {
+        return 25
       },
     },
   },
@@ -38,12 +44,19 @@ export default {
   },
   methods: {
     buildAntConfig (ant) {
-      return {
+      const antConfig = {
         ...this.antBaseConfig,
         ...ant,
         src: `/assets/images/${ant.type || 'ant'}.jpg`,
       }
-    }
+      const antWithLocalCoords = this.mapToLocalCoordinateSystem(antConfig)
+      return antWithLocalCoords
+    },
+    mapToLocalCoordinateSystem (ant) {
+      ant.x *= this.gridSpacing
+      ant.y *= this.gridSpacing
+      return ant
+    },
   },
 }
 </script>
