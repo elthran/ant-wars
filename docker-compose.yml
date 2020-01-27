@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  app:
+    container_name: app
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/ant-wars
+    depends_on:
+      - mysql
+    environment:
+      &default-environment
+      FLASK_ENV: development
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ant_wars
+      MYSQL_USER: ant_wars_user
+      MYSQL_PASSWORD: ant_wars_password
+
+  mysql:
+    container_name: mysql
+    image: "mysql:latest"
+    volumes:
+       - mysql:/var/lib/mysql
+    environment: *default-environment
+
+volumes:
+    mysql: {}
