@@ -1,4 +1,12 @@
-version: '3'
+version: '3.4'
+
+x-default-environment:
+  &default-environment
+  MYSQL_ROOT_PASSWORD: root
+  MYSQL_DATABASE: ant_wars
+  MYSQL_USER: ant_wars_user
+  MYSQL_PASSWORD: ant_wars_password
+  MYSQL_HOST: db:3306
 
 services:
   app:
@@ -9,18 +17,22 @@ services:
     volumes:
       - .:/ant-wars
     depends_on:
-      - mysql
+      - db
+    links:
+      - db
     environment:
-      &default-environment
+      << : *default-environment
       FLASK_ENV: development
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ant_wars
-      MYSQL_USER: ant_wars_user
-      MYSQL_PASSWORD: ant_wars_password
+      PYTHONBREAKPOINT: ipdb.set_trace
+      FLASK_ENV: development
+      FLASK_APP: app/main.py
+      FLASK_RUN_HOST: 0.0.0.0
 
-  mysql:
-    container_name: mysql
+  db:
     image: "mysql:latest"
+    container_name: db
+    ports:
+      - "3306:3306"
     volumes:
        - mysql:/var/lib/mysql
     environment: *default-environment
