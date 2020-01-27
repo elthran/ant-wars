@@ -1,12 +1,14 @@
+import os
+
 from . import private_config
 
 # SITE_URL = 'https://www.undyingkingdoms.com'
-DATABASE_NAME = "ant_wars"
 
 MYSQL_BASE = "mysql+mysqldb://{user}:{passwd}@{host}/{dbname}?{options}"
-USER = "mysql_elthran"
-DB_PASSWORD = private_config.DB_PASSWORD
-HOST = "localhost"
+USER = os.environ["MYSQL_USER"]
+DB_PASSWORD = os.environ["MYSQL_PASSWORD"]
+DATABASE_NAME = os.environ["MYSQL_DATABASE"]
+HOST = os.environ["MYSQL_HOST"] # docker-compose service name?
 OPTIONS = "charset=utf8"
 
 # dummy account info
