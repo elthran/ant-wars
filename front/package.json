@@ -9,7 +9,7 @@
     "watch": "webpack --watch  --progress --hide-modules --config config/webpack.config.js"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "konva": "^4.0.14",
     "lodash": "^4.17.15",
     "vue": "^2.6.10",
